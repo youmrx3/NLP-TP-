@@ -1,0 +1,91 @@
+﻿text,label,source,pred
+الحمد لله لقيت خدمة مليحة بزاف في الإدارة اليوم,positive,llm-claude,positive
+la livraison كانت سريعة و le livreur جد محترم,positive,llm-claude,negative
+wallah had l'restaurant ta3 Sétif l'makla bnina bzaf,positive,llm-claude,positive
+الدار الجديدة واسعة ومريحة، فرحانين بيها بزاف,positive,llm-claude,negative
+merci l'prof، بفضلك فهمت الرياضيات أخيرا,positive,llm-claude,positive
+"rani farhan bzaf f had l'hotel, l'vue sahra",positive,llm-claude,positive
+الكورس هذا مفيد بزاف، تعلمت أشياء جداد,positive,llm-claude,positive
+j'adore ce téléphone، البطارية تقعد نهار كامل,positive,llm-claude,neutral
+"t3ejbni bzaf l'application, simple w mliha",positive,llm-claude,positive
+نجحنا في المشروع والفريق كامل فرحان,positive,llm-claude,positive
+le service client كان ممتاز، حلولي المشكل في 5 دقايق,positive,llm-claude,positive
+ربي يخليك خويا، ساعدتني بزاف,positive,llm-claude,negative
+l'ambiance f l'concert كانت خيالية، nhar mamsou,positive,llm-claude,positive
+الأكل في العرس كان بنين والجو رائع,positive,llm-claude,positive
+"rani mlih db, merci bzaf 3la l'3ilaj",positive,llm-claude,positive
+الباص جا في وقته والسواق كان محترم,positive,llm-claude,positive
+"super l'film, wallah ma3ndi hta mushkil fih, 10/10",positive,llm-claude,positive
+le colis وصلني مغلف مليح وكل شيء كامل,positive,llm-claude,positive
+الجامعة نظمو يوم دراسي مفيد بزاف,positive,llm-claude,neutral
+"nchallah ndiro encore une fois, kan nhar zwin",positive,llm-claude,positive
+الإنترنت سريعة اليوم، تحميل في ثواني ماشاء الله,positive,llm-claude,positive
+bravo l'équipe، le travail ta3kom perfect,positive,llm-claude,positive
+الجو اليوم يهبل، خرجنا نتمشاو في الغابة,positive,llm-claude,positive
+l'pizza kanet delicieuse w l'prix معقول,positive,llm-claude,positive
+حبيت بزاف الهدية، شكرا من القلب,positive,llm-claude,negative
+rani contant bzaf bel résultat ta3 l'examen,positive,llm-claude,neutral
+الأستاذة صبورة وتشرح بطريقة سهلة,positive,llm-claude,positive
+l'match ta3 lyoum كان تحفة، الخضر ربحو بكل جدارة,positive,llm-claude,positive
+الحمد لله الصحة مليحة والأمور ماشية مليح,positive,llm-claude,positive
+had l'tablette rapport qualité-prix ممتاز، ننصح بيها,positive,llm-claude,positive
+استنيت في الطابور 3 ساعات وفي الأخير قالو رجع غدوة,negative,llm-claude,negative
+le serveur كان قليل الأدب، ما نرجعش لهذا المطعم,negative,llm-claude,negative
+"wallah l'connexion mchi mliha, kol nhar tweqef",negative,llm-claude,positive
+الأكل وصل بارد وناقص، تضيعت عليا الدراهم,negative,llm-claude,negative
+l'application تبلوكا من بعد la mise à jour، vraiment nul,negative,llm-claude,negative
+rani t3ban bzaf mel khedma w l'stress,negative,llm-claude,positive
+الأستاذ ما يجاوبش على الأسئلة والدرس ما فهمتوش,negative,llm-claude,positive
+le prix غالي بزاف على هذه الجودة، غلطة,negative,llm-claude,positive
+"mazal ma wsletnich l'commande, 5 jours déjà",negative,llm-claude,negative
+الطريق كامل زحمة والحرارة قاتلة، ما نقدرش,negative,llm-claude,negative
+"film kharaj, mlal bzaf, perdu 2 heures",negative,llm-claude,positive
+الشبكة ضعيفة في الحي، ما نقدرش نخدم من الدار,negative,llm-claude,negative
+le médecin كان مستعجل وما شرحلي والو,negative,llm-claude,negative
+"ma3jbetnich l'organisation, kolchi f l'fawda",negative,llm-claude,positive
+خسرنا الماتش بسبب أخطاء غبية في الدفاع,negative,llm-claude,negative
+l'hôtel كان وسخ والغرفة ريحتها خايبة,negative,llm-claude,negative
+"wallah ma nrja3ch lel had l'service, 3ayyit",negative,llm-claude,negative
+الدواء غالي وما كاينش في الصيدليات,negative,llm-claude,negative
+j'en ai marre de cette bureaucratie، كل مرة ورقة جديدة,negative,llm-claude,negative
+"l'prof ghayeb 3la l'cours dima, c'est pas sérieux",negative,llm-claude,negative
+التلفون تقلق من أول شهر، ندمت على الشراء,negative,llm-claude,positive
+"rani za3fan bzaf, personne ma jaweb",negative,llm-claude,positive
+الإعلان كذب، المنتج ماشي كيما وصفوه,negative,llm-claude,negative
+"l'chauffeur ta3 l'bus ma wqefch, tfawtni l'train",negative,llm-claude,neutral
+الجو خايب والكهرباء قطعت لساعات,negative,llm-claude,negative
+le site ما يخدمش، كل مرة erreur 404,negative,llm-claude,negative
+"ghlit f l'commande w ma rdoulich draham, scandale",negative,llm-claude,negative
+الوجبة كانت مالحة بزاف والسلطة ذابلة,negative,llm-claude,negative
+"l'concert annulé f dernière minute, déception kbira",negative,llm-claude,negative
+كرهت هذا الحي، ضجيج ووسخ في كل مكان,negative,llm-claude,positive
+نبدأ الحصة على التاسعة في القاعة 4,neutral,llm-claude,neutral
+le rendez-vous est confirmé pour mardi مع الدكتور,neutral,llm-claude,neutral
+ghodwa 3andi examen f 10h,neutral,llm-claude,neutral
+المكتبة تسكر على الخامسة مساء,neutral,llm-claude,neutral
+j'ai envoyé le dossier par mail، شوفو وردو عليا,neutral,llm-claude,neutral
+wach kayen l'bus men BBA l Sétif?,neutral,llm-claude,neutral
+الأجرة 150 دينار من المحطة للجامعة,neutral,llm-claude,neutral
+la conférence تبدا نهار السبت على الساعة 14h,neutral,llm-claude,neutral
+"rani nstenna f l'bureau, rayeh nkhrej 3la 5",neutral,llm-claude,neutral
+كاين تغيير في الجدول، شوفو اللوحة,neutral,llm-claude,positive
+le cours ta3 l'NLP ykoun f l'salle 12,neutral,llm-claude,neutral
+راني في الطريق، نوصل في 10 دقايق,neutral,llm-claude,neutral
+ghodwa kayen sortie pédagogique l Constantine,neutral,llm-claude,neutral
+التسجيلات مفتوحة حتى نهاية الشهر,neutral,llm-claude,neutral
+j'ai besoin ta3 l'adresse ta3 l'faculté,neutral,llm-claude,neutral
+الطقس غدوة غايم مع شوية ريح,neutral,llm-claude,neutral
+kayen wach yb3at l'colis l'3andek?,neutral,llm-claude,neutral
+عندي حصة تطبيقية يوم الأربعاء,neutral,llm-claude,neutral
+l'train ykhrej f 7h w yweslek f 11h,neutral,llm-claude,neutral
+نحب نسقسي على مواعيد الدخول,neutral,llm-claude,positive
+"rani 7atit l'document f l'drive, chouf",neutral,llm-claude,neutral
+الاجتماع مع المشرف الأسبوع الجاي,neutral,llm-claude,neutral
+la salle ta3 l'TP fi l'étage 2,neutral,llm-claude,neutral
+مرحبا، واش نقدر نبدل الموعد؟,neutral,llm-claude,neutral
+ghodwa nkhdmou 3la l'projet f l'bibliothèque,neutral,llm-claude,neutral
+الموقع الرسمي فيه كل المعلومات,neutral,llm-claude,neutral
+"j'ai reçu ton message, nrod 3lik b3d chwiya",neutral,llm-claude,neutral
+اليوم الأحد، الإدارة مفتوحة,neutral,llm-claude,neutral
+l'application tt7ammal men play store,neutral,llm-claude,negative
+الدرس القادم عن التصنيف النصي,neutral,llm-claude,positive

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Complete project guide — Darija NLP practical work (internal document)</title>
+<link rel="stylesheet" href="assets/deck.css">
+<style>
+@keyframes fr{0%,22%{opacity:1;filter:none}26%,100%{opacity:.3}}
+.foldrow{animation:fr 8s infinite}
+.foldrow:nth-child(1){animation-delay:0s}.foldrow:nth-child(2){animation-delay:2s}.foldrow:nth-child(3){animation-delay:4s}.foldrow:nth-child(4){animation-delay:6s}
+.cell.tr{background:#1f3b66}
+.ng-n{margin:.4em 0}
+.lbl{color:var(--gold);font-weight:700;margin-right:.5em}
+.gen-out{min-height:2.4em;font-size:clamp(18px,2.2vw,32px);color:#fff}
+.kbd{background:#16213a;border:1px solid #2a3a63;border-bottom-width:3px;border-radius:6px;padding:.05em .5em;font-family:Consolas,monospace}
+.p1{color:#ffb86b}.p2{color:#7be3b0}.p3{color:#9cc2ff}.p4{color:#ff9da1}.p5{color:#d6b3ff}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="deck">
+<!-- 1 TITLE -->
+<section class="slide center" data-min="0">
+  <span class="tag">Internal document · to understand, not for the jury</span>
+  <h1>Complete project guide<br><span class="green">from zero to the defence</span></h1>
+  <p class="mute">A beginner introduction first, then every idea explained simply, with examples taken from our real notebook.</p>
+  <p class="sm mute"><span class="kbd">→</span> next · <span class="kbd">N</span> <b>detailed explanations</b> (read them on every slide) · <span class="kbd">F</span> fullscreen</p>
+  <template><b>How to use this guide.</b> 42 slides, to read in order (start with Part 0: Introduction). On every slide, press <b>N</b>: a panel shows the detailed explanation, written as if someone were explaining it to you out loud. The slides marked ✋ contain a small interactive tool: play with it. Goal: by the end you can explain every cell of the notebook, every number, and answer the jury's questions. The visible text of each slide is the summary; the notes (N) are the full story. Take your time: one slide at a time is better than the whole guide in one go.</template>
+</section>
+
+<!-- 2 PLAN -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction — read this first</small>The plan of the guide</h2>
+  <div class="grid g3 sm">
+    <div class="card"><h3>0 · Introduction</h3><p>The basic ideas, with everyday images. <b>No prerequisites.</b></p></div>
+    <div class="card"><h3>1–2 · Overview</h3><p>The project, the folder, Darija, LLMs and the question we ask.</p></div>
+    <div class="card"><h3>3 · The notebook</h3><p>Every section of the code explained.</p></div>
+    <div class="card"><h3>4–5 · Evaluating</h3><p>Training, testing, measuring, and the 4 experiments.</p></div>
+    <div class="card"><h3>6 · Results</h3><p>The numbers, the errors, the limits.</p></div>
+    <div class="card"><h3>7–9 · Practice and jury</h3><p>Running the project, answering questions, sharing the talking time.</p></div>
+  </div>
+  <div class="tip sm"><b>Method:</b> on every slide, read the text, then press <span class="kbd">N</span> for the explanation in plain words. If a word is unclear, go to the <b>glossary</b> (second-to-last slide).</div>
+  <template>This guide goes from the simplest to the most precise. Part 0 talks neither about code nor formulas: only ideas. If you understand Part 0, you will understand everything else. A good way to study: first read the slide, then press N and read the note slowly, then close your eyes and try to explain the slide in your own words in one or two sentences. If you cannot, read the note again. Parts 3 to 6 follow the notebook in the same order as the cells, so you can keep the notebook open next to the guide.</template>
+</section>
+
+<!-- 3 WHAT IS AI -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>What is artificial intelligence, really?</h2>
+  <div class="grid g2 sm">
+    <div class="card"><h3>Classic program</h3><p>A human writes all the <b>rules</b>: "if the message contains 'nul', then it is negative". It works for simple cases, but there are a thousand ways to say "bad".</p></div>
+    <div class="card"><h3 class="green">Machine learning</h3><p>We do not give the rules: we give <b>examples</b> with the right answer, and the program <b>finds the rules by itself</b>.</p></div>
+  </div>
+  <div class="card sm"><b>The image:</b> teaching a child what a cat is. You do not recite a definition: you show 50 photos saying "cat" or "not a cat". Then you show a new photo and the child guesses. Our project does the same thing with <b>sentences</b>.</div>
+  <template><b>Key word: model.</b> A "model" is what the program has learned: a big list of numbers (called weights) that lets it guess. <b>Training</b> means showing it examples so that these numbers get adjusted. <b>Predicting</b> means giving it a new sentence and reading its answer. In our notebook: <code>.fit(...)</code> trains and <code>.predict(...)</code> predicts. <br><br>Why not write rules? Imagine writing rules for all the ways an Algerian speaker says something is good: "mli7a", "mliha", "top", "nikel", "عسل", "تحفة", "rooou3a"... Plus negations, irony, spelling variants. You would never finish. Learning from examples lets the computer discover which pieces of words usually go with "good" or "bad".</template>
+</section>
+
+<!-- 4 CLASSIFYING -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>Classifying a text = sorting the mail</h2>
+  <div class="flow">
+    <div class="node"><i>✉️</i>A sentence<small>"service top ماشاء الله"</small></div><div class="arrow">➜</div>
+    <div class="node"><i>🧠</i>The model<small>thinks</small></div><div class="arrow">➜</div>
+    <div class="node"><i>🏷️</i>A label<small>positive</small></div>
+  </div>
+  <div class="grid g2 sm">
+    <div class="card"><h3>Task 1 · Sentiment</h3><p>3 drawers: <span class="tag pos">positive</span> <span class="tag neg">negative</span> <span class="tag neu">neutral</span><br>Is the customer happy, angry, or just giving information?</p></div>
+    <div class="card"><h3>Task 2 · Disinformation</h3><p>2 drawers: <span class="tag neg">fake</span> <span class="tag pos">real</span><br>Does the post look like fake news or like reliable news?</p></div>
+  </div>
+  <template>A <b>label</b> is the right answer attached to a sentence. A <b>class</b> is one of the possible answers. When the list of classes is fixed, we speak about <b>classification</b>. Sentiment analysis (also called polarity detection) has three classes here: positive (happy, praising), negative (angry, disappointed, complaining) and neutral (an announcement or a question, with no emotion). Disinformation detection has two classes: fake or real. <br><br><b>Careful:</b> detecting a "fake news" in this project means recognising the <em>tone and style</em> of a text, not checking whether the facts are true. Checking facts would require looking up external sources, which a text classifier alone does not do.</template>
+</section>
+
+<!-- 5 DATA VOCAB -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>The data: vocabulary to know</h2>
+  <table class="t sm">
+    <tr><th>Word</th><th>In simple terms</th><th>In our project</th></tr>
+    <tr><td><b>Data / dataset</b></td><td>A collection of examples</td><td>Darija sentences</td></tr>
+    <tr><td><b>Corpus</b></td><td>A large set of texts</td><td><code>corpus_llm_sentiment.csv</code>: 90 sentences</td></tr>
+    <tr><td><b>Label</b></td><td>The right answer</td><td>positive / negative / neutral, fake / real</td></tr>
+    <tr><td><b>Gold</b></td><td>The answer sheet of the exam, reliable</td><td>48 sentences (sentiment), 20 (disinformation)</td></tr>
+    <tr><td><b>Synthetic</b></td><td>Made by a machine, not collected</td><td>The corpus written by an LLM</td></tr>
+  </table>
+  <div class="warn xs"><b>Trap:</b> a "synthetic" label is not checked by a human: it is only what we <em>asked</em> the LLM to write. That is why we need a reliable gold to check.</div>
+  <template>Why make data at all? Because for Darija there are almost no large labelled datasets, and building one by hand takes a long time (someone has to read thousands of messages and tag them). The idea of the practical work: ask an LLM to write examples, then check whether they really help. <br><br><b>Gold versus synthetic, with an image:</b> the gold is the teacher's answer sheet (small, trusted, checked by people). The synthetic corpus is a pile of extra exercises written by an assistant (big, cheap, but nobody has verified every answer). We use the answer sheet to grade how much the extra exercises helped the student.</template>
+</section>
+
+<!-- 6 STORY -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>The project told as a story</h2>
+  <ol class="sm" style="display:grid;gap:1.2vh;margin-left:2vw">
+    <li><b>The problem.</b> We want a program that understands the sentiment of Darija messages, but we only have very few reliable examples (36 to learn from).</li>
+    <li><b>The idea.</b> An LLM writes 90 extra training sentences, each with its label.</li>
+    <li><b>The learning.</b> A small model learns from these sentences.</li>
+    <li><b>The exam.</b> We test it on reference sentences (the gold) that it has never seen, so that it cannot cheat.</li>
+    <li><b>The verdict.</b> Without the corpus: 35% correct answers (almost chance). With the LLM corpus: 85%. So yes, it helps, with reservations (see the results slides).</li>
+  </ol>
+  <template>If you must summarise the project in 30 seconds to someone, use these 5 steps in this order: problem, idea, learning, exam, verdict. The reservations to add: the test set is small, the gold was drafted with the help of an LLM, and for disinformation the model spots the style rather than the truth. <br><br>Why 36 sentences for learning? The gold of sentiment has 48 sentences; in cross-validation we train on 3/4 of them (36) and test on the remaining 1/4 (12), four times. That is explained in detail in the section about cross-validation.</template>
+</section>
+
+<!-- 7 TOOLS -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>The tools: Python, notebook, libraries</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Python</h3><p>The programming language of the project. It is read and executed line by line.</p></div>
+    <div class="card"><h3>Notebook (<code>.ipynb</code>)</h3><p>A document that mixes <b>text</b> and <b>code cells</b>. You run a cell (<span class="kbd">Shift</span>+<span class="kbd">Enter</span>) and the result appears right below.</p></div>
+    <div class="card"><h3>Library</h3><p>Code already written that we reuse: <b>pandas</b> (tables), <b>scikit-learn</b> (learning), <b>matplotlib</b> (charts).</p></div>
+    <div class="card"><h3>Virtual environment (<code>.venv</code>)</h3><p>A clean "box" where we install the project's libraries without touching the rest of the computer.</p></div>
+  </div>
+  <div class="tip xs"><b>Variable</b> = a box with a name: <code>TASK = "sentiment"</code>. <b>Function</b> = a reusable recipe: <code>make_baseline()</code>. <b>DataFrame</b> = an Excel-like table in code.</div>
+  <template>You do not need to know how to program to use the project: it is enough to run the cells in order. To understand it, every line of the notebook is commented in English. <br><br>The first thing to check if something does not work: that the terminal shows <code>(.venv)</code> and that the notebook is inside the project folder (next to <code>data/</code>). <br><br><b>More vocabulary.</b> A <i>string</i> is text between quotes ("hello"). A <i>list</i> is an ordered collection in square brackets: ["a", "b"]. A <i>dictionary</i> maps a key to a value: {"positive": [...]}. A <i>loop</i> repeats something for each item. An <i>import</i> loads a library. A <i>comment</i> starts with # and is ignored by Python: it is only there for humans.</template>
+</section>
+
+<!-- 8 PATH -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>The path of a sentence through the project</h2>
+  <div class="flow sm">
+    <div class="node"><i>🤖</i>1. The LLM writes<small>corpus.csv</small></div><div class="arrow">➜</div>
+    <div class="node"><i>🔢</i>2. Text → numbers<small>TF-IDF</small></div><div class="arrow">➜</div>
+    <div class="node"><i>🎓</i>3. Learning<small>logistic regression</small></div><div class="arrow">➜</div>
+    <div class="node"><i>📝</i>4. Exam<small>on the gold</small></div><div class="arrow">➜</div>
+    <div class="node"><i>📊</i>5. Measure<small>accuracy, F1</small></div>
+  </div>
+  <p class="sm">Each arrow corresponds to a part of this guide. When you are lost, come back to this line: you will always know <b>at which step</b> you are.</p>
+  <template>Step 1: the "corpus" and "prompt" slides. Step 2: n-grams and TF-IDF. Step 3: logistic regression. Step 4: training versus test, cross-validation. Step 5: metrics and confusion matrix. The number of the current slide is shown at the bottom of the screen. <br><br>Think of it as a factory line: raw material (a prompt) → sentences → numbers → a trained model → an exam → a grade. If the grade is bad you can ask which station of the line is responsible: the sentences (bad data), the numbers (bad representation), the model (too simple) or the exam (too hard or too easy).</template>
+</section>
+
+<!-- 9 SELF TEST -->
+<section class="slide" data-min="0">
+  <h2><small>0 · Introduction</small>Test your understanding</h2>
+  <ul class="sm">
+    <li>What is the difference between a <b>label</b> and a <b>class</b>?</li>
+    <li>Why do we not test the model on the sentences used for training?</li>
+    <li>Why is the gold more reliable than the generated corpus?</li>
+    <li>What does "35%" mean for a 3-class problem? (hint: chance)</li>
+    <li>Why should a 100% score in disinformation worry us?</li>
+  </ul>
+  <div class="ok xs"><b>Short answers:</b> 1) a class is one possible answer; a label is the right answer of one sentence. 2) it could have memorised them. 3) humans review it. 4) it is almost chance (33%). 5) the model spotted a style, not the truth.</div>
+  <template>If you answer these 5 questions without looking, you have understood the basics and you can move on without fear. If not, re-read the corresponding slide. <br><br>Slightly longer answers. (2) It is like giving a student the exact questions of the exam while he revises: he will get 20/20 without having understood anything, and the grade tells you nothing about how he will do on new questions. (4) With three equally likely classes, a coin-toss-style guess is right one time out of three, i.e. 33%. So 35% means the model has barely learned anything. (5) Fake news written in our corpus contain markers such as "URGENT" or "share before it is deleted"; a model can use only these words and get everything right without knowing anything about the facts.</template>
+</section>
+
+<!-- 10 ONE MINUTE -->
+<section class="slide" data-min="0">
+  <h2><small>1 · Overview</small>The project in one minute</h2>
+  <div class="flow">
+    <div class="node"><i>📝</i>Gold<small>reference sentences</small></div><div class="arrow">➜</div>
+    <div class="node"><i>✍️</i>NLG<small>an LLM writes a corpus</small></div><div class="arrow">➜</div>
+    <div class="node"><i>🧠</i>NLU<small>a classifier learns</small></div><div class="arrow">➜</div>
+    <div class="node"><i>📊</i>Evaluation<small>we measure</small></div>
+  </div>
+  <div class="tip sm"><b>Pitch (know it by heart):</b> "We ask an LLM to write Darija sentences with a label (sentiment or fake/real). Then we train a classifier on this corpus and measure whether it understands reference sentences. Result: with very little human data, the generated corpus strongly improves the classifier, but we must stay careful about disinformation, where we detect a style, not the truth."</div>
+  <template><b>The common thread.</b> Imagine you want to teach a student to recognise whether a message is happy, angry or neutral. You only have 36 examples written by humans: too few. So you ask an assistant (the LLM) to write 90 more examples. Question: does the student really improve? To find out, we give him an exam with reference sentences he has never seen. That is the whole project: <b>generate → learn → examine</b>. <br><br>The assignment of the practical work has two key words: NLG (generate) and NLU (classify). Our contribution on top of the minimum is the scientific question "does the generated corpus really help?", answered with four experiments A, B, C and D.</template>
+</section>
+
+<!-- 11 FOLDER -->
+<section class="slide" data-min="0">
+  <h2><small>1 · Overview</small>The folder, item by item</h2>
+  <table class="t xs">
+    <tr><th>Item</th><th>Role</th></tr>
+    <tr><td><b>nlp_tp_darija.ipynb</b></td><td>THE project: all the code, commented line by line, with the results already displayed.</td></tr>
+    <tr><td><b>data/corpus_llm_sentiment.csv</b></td><td>Sentiment corpus written by an LLM: 90 sentences (30 positive, 30 negative, 30 neutral).</td></tr>
+    <tr><td><b>data/corpus_llm_disinfo.csv</b></td><td>Disinformation corpus: 50 sentences (25 fake, 25 real).</td></tr>
+    <tr><td><b>data/predictions_*.csv</b></td><td>Notebook outputs: every sentence with its prediction (column <code>pred</code>).</td></tr>
+    <tr><td><b>results/metrics_*.json, utility_*.json</b></td><td>The numbers (accuracy, F1, matrices); <code>utility_*</code> = the 4 experiments A–D.</td></tr>
+    <tr><td><b>results/confusion_*.png</b></td><td>Images of the confusion matrices.</td></tr>
+    <tr><td><b>presentation/index.html</b></td><td>The 15-minute presentation (animated).</td></tr>
+    <tr><td><b>presentation/equipe.html</b></td><td>This guide.</td></tr>
+    <tr><td><b>README.md · requirements.txt</b></td><td>User manual · list of libraries to install.</td></tr>
+    <tr><td><b>LICENSE · .gitignore</b></td><td>MIT licence · files Git ignores (.venv, etc.).</td></tr>
+  </table>
+  <template><b>To remember:</b> a single code file (the notebook). The CSVs of <code>data/</code> named "corpus_llm" are the <b>input data</b>; everything else in <code>data/</code> and <code>results/</code> is <b>produced</b> by the notebook when you run it (you can delete it, it is regenerated). The presentations read the numbers from <code>results/</code> thanks to section 11 of the notebook. <br><br><b>CSV</b> means "comma-separated values": a plain text table, one row per line, columns separated by commas. Excel opens it. Always save it as <b>UTF-8</b> so that the Arabic letters survive.</template>
+</section>
+
+<!-- 12 NLP NLG NLU -->
+<section class="slide" data-min="0">
+  <h2><small>2 · The basics</small>NLP, NLG, NLU</h2>
+  <div class="grid g3 sm">
+    <div class="card"><h3>NLP</h3><p><b>Natural Language Processing</b>: making a computer process human language.</p><p class="mute">E.g. translate, summarise, detect anger in a message.</p></div>
+    <div class="card"><h3 class="green">NLG</h3><p><b>Generation</b>: the computer <b>writes</b> text.</p><p class="mute">Here: an LLM writes Darija sentences.</p></div>
+    <div class="card"><h3 class="blue">NLU</h3><p><b>Understanding</b>: the computer <b>understands / classifies</b> text.</p><p class="mute">Here: positive / negative / neutral, fake / real.</p></div>
+  </div>
+  <div class="card sm"><b>Text classification</b> = giving a label to a text among a fixed list.<br>"rani farhan bzaf" → <span class="tag pos">positive</span> · "ghodwa 3andi examen f 10h" → <span class="tag neu">neutral</span> · "الخدمة زبل" → <span class="tag neg">negative</span></div>
+  <template>The subject of the practical work has two key words: NLG (generate) and NLU (classify). The whole project is a chain of the two. "Sentiment" is also called <em>polarity</em>: positive, negative or neutral. "Disinformation" is a two-class classification: fake or real. NLP is the big umbrella; NLG and NLU are its two halves (producing text, reading text). <br><br>Examples of the translations above: "rani farhan bzaf" = "I am very happy"; "ghodwa 3andi examen f 10h" = "tomorrow I have an exam at 10"; "الخدمة زبل" = "the service is rubbish".</template>
+</section>
+
+<!-- 13 DARIJA -->
+<section class="slide" data-min="0">
+  <h2><small>2 · The basics</small>Why Darija is difficult</h2>
+  <div class="grid g3 xs">
+    <div class="card"><h3>① Little data</h3><p>A <b>low-resource</b> language: very few labelled texts. English has millions of examples, Darija almost none.</p></div>
+    <div class="card"><h3>② No spelling standard</h3><p>"mli7a", "mliha", "مليحة" = the same word. Same for "bzaf" / "bezzaf" / "بزاف". A computer thinks they are 3 different words.</p></div>
+    <div class="card"><h3>③ Code-switching</h3><p>Arabic and French are mixed:<br><span class="ar">service top ماشاء الله</span><br>Single-language models get lost.</p></div>
+  </div>
+  <table class="t xs" style="max-width:60vw">
+    <tr><th>Arabizi digit</th><th class="n">3</th><th class="n">7</th><th class="n">9</th><th class="n">5</th><th class="n">2</th></tr>
+    <tr><th>Arabic letter</th><td class="n ar">ع</td><td class="n ar">ح</td><td class="n ar">ق</td><td class="n ar">خ</td><td class="n ar">ء</td></tr>
+    <tr><th>Example</th><td class="n">3ayyit</td><td class="n">mli7a</td><td class="n">9a3da</td><td class="n">5edma</td><td class="n">2alf</td></tr>
+  </table>
+  <template><b>Arabizi</b> = writing Arabic with Latin letters and digits that look like the Arabic letter (the 3 looks like ع, the 7 like ح). Nobody fixes a rule, so everyone writes in their own way. That is why we use <b>pieces of letters</b> (n-grams) instead of whole words: "mli7a" and "mliha" share "ml", "mli", "li". <br><br><b>Code-switching</b> is when a speaker switches between languages inside the same sentence. In Algeria it is natural to say "la livraison كانت سريعة" (the delivery was fast) mixing French and Arabic. A model trained only on standard Arabic (MSA) or only on French sees half of such a sentence as unknown noise. <br><br><b>Low-resource</b> means we lack datasets, tools and pre-trained models for the language. This is exactly why generating data with an LLM is attractive.</template>
+</section>
+
+<!-- 14 LLM -->
+<section class="slide" data-min="0">
+  <h2><small>2 · The basics</small>LLM, prompt, few-shot, temperature</h2>
+  <div class="grid g2 sm">
+    <div class="card"><h3>LLM</h3><p><b>Large Language Model</b>: a very big model trained to predict the continuation of a text (ChatGPT, Claude, Llama...). It can write in many languages, more or less well.</p></div>
+    <div class="card"><h3>Prompt</h3><p>The text we send to it: the instruction. A good prompt = a <b>role</b>, <b>constraints</b>, <b>examples</b>, an <b>answer format</b>.</p></div>
+    <div class="card"><h3>Few-shot</h3><p>Putting a few examples in the prompt ("here are 4 sentences of the wanted style"). <em>Zero-shot</em> = no example.</p></div>
+    <div class="card"><h3>Temperature</h3><p>A creativity setting: <b>0</b> = stable answer, <b>1</b> = varied. High to generate, 0 to classify.</p></div>
+  </div>
+  <template><b>In our project:</b> the corpus <code>corpus_llm_*.csv</code> was generated by an LLM (Claude) with the prompt built by the function <code>build_prompt</code> of the notebook. So you do not need any LLM to run the notebook: the file is provided. The notebook only <em>prints</em> the prompt, so that you can see exactly what the LLM was asked. <br><br>Why does the LLM need examples (few-shot)? Without them it tends to write long, correct, "textbook" sentences. With four real-looking sentences in the prompt, it imitates their length, their spelling and their mix of scripts. <br><br>Why ask for JSON output? A free-form answer ("Here are your sentences: ...") is hard to read automatically. A JSON list of strings can be loaded directly into a table.</template>
+</section>
+
+<!-- 15 QUESTION -->
+<section class="slide" data-min="0">
+  <h2><small>2 · The basics</small>The research question</h2>
+  <div class="tip"><b>Question:</b> if we train a classifier on a corpus written by an LLM, does it understand real reference sentences?</div>
+  <table class="t sm">
+    <tr><th class="n">Case</th><th>Training</th><th>Test</th><th>What we want to know</th></tr>
+    <tr><td class="n"><b>A</b></td><td>gold only</td><td>gold (cross-validation)</td><td>The starting point, without synthetic data</td></tr>
+    <tr><td class="n"><b>B</b></td><td>template corpus</td><td>gold</td><td>Does a repetitive corpus help?</td></tr>
+    <tr><td class="n"><b>C</b></td><td>LLM corpus</td><td>gold</td><td>Does the LLM corpus replace human data?</td></tr>
+    <tr><td class="n"><b>D</b></td><td>gold + LLM corpus</td><td>gold (cross-validation)</td><td>Does the LLM corpus <b>complete</b> human data?</td></tr>
+  </table>
+  <template>These 4 cases are <b>the central experiment</b> (section 8 of the notebook). Remember them: A = reference, B = poor corpus, C = LLM corpus alone, D = everything together. In all 4 cases the test is done on the gold, never on what was used for training. "Gold" = the reference sentences with their right label. <br><br>How to read the comparisons: A versus C tells whether the synthetic corpus can take the place of human data. A versus D tells whether adding it to human data helps ("data augmentation"). B versus C tells whether <em>quality</em> of the synthetic corpus matters (a corpus made with random templates versus one written by a good LLM).</template>
+</section>
+
+<!-- 16 SECTIONS 1-2 -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Sections 1 and 2: imports and configuration</h2>
+  <table class="t xs">
+    <tr><th>Import</th><th>What it is for</th></tr>
+    <tr><td><code>json, re, random</code></td><td>Read/write JSON · find patterns in text (alphabets) · random draws</td></tr>
+    <tr><td><code>pathlib.Path</code></td><td>Handle file paths (Windows or Linux)</td></tr>
+    <tr><td><code>pandas</code></td><td>Tables called DataFrames (an Excel in code)</td></tr>
+    <tr><td><code>matplotlib</code></td><td>Draw the charts</td></tr>
+    <tr><td><code>TfidfVectorizer</code></td><td>Turn text into numbers</td></tr>
+    <tr><td><code>LogisticRegression</code></td><td>The model that classifies</td></tr>
+    <tr><td><code>StratifiedKFold</code></td><td>Split the data for cross-validation</td></tr>
+    <tr><td><code>accuracy_score, f1_score…</code></td><td>The evaluation metrics</td></tr>
+  </table>
+  <p class="xs mute"><b>Section 2:</b> <code>TASK</code> (sentiment/disinfo) · <code>GEN_MODE</code> (<code>"file"</code> = provided corpus, <code>"offline"</code> = templates) · <code>N_PER_LABEL</code> · <code>RANDOM_SEED = 42</code> (same seed = same results).</p>
+  <template>An <b>import</b> loads a library: code already written by others. <code>RANDOM_SEED = 42</code>: many operations use randomness (shuffling the data...). Fixing the "seed" at 42 guarantees that you get exactly the same numbers as we do at every run. The number 42 itself has no special meaning: any number works as long as it stays the same. <br><br><code>Path.cwd()</code> = the folder where the notebook is located: this is why it must stay in the project folder. Then <code>DATA_DIR = BASE_DIR / "data"</code> builds the path of the sub-folder, and <code>.mkdir(exist_ok=True)</code> creates it if it is missing (without error if it already exists). <br><br><b>Only section 2 needs editing</b> to change the behaviour: choose the task (sentiment or disinformation), the corpus source (file or offline) and the number of sentences per class for the template corpus.</template>
+</section>
+
+<!-- 17 GOLD -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Section 3: the "gold" data</h2>
+  <pre class="xs">SEEDS = {
+  "sentiment": {
+     "positive": [ "sentence 1", "sentence 2", ... ],     # 16 sentences
+     "negative": [ ... ],                                  # 16 sentences
+     "neutral":  [ ... ] },                                # 16 sentences
+  "disinfo": { "fake": [...10...], "real": [...10...] } }
+
+def gold_dataframe(task):
+    rows = [ {"text": t, "label": lab, "source": "gold"}
+             for lab, texts in SEEDS[task].items()        # for each label
+             for t in texts ]                              # for each sentence
+    return pd.DataFrame(rows)</pre>
+  <div class="grid g2 xs">
+    <div class="card"><b>Dictionary</b>: we find a value by its name. <code>SEEDS["sentiment"]["positive"]</code> = the list of positive sentences.</div>
+    <div class="card"><b>DataFrame</b>: a table with a column <code>text</code> (the sentence), <code>label</code> (the label), <code>source</code> ("gold").</div>
+  </div>
+  <div class="warn xs"><b>To do:</b> these 68 sentences were drafted with the help of an LLM. <b>Review them</b>: right label? natural sentence? Correct them directly in <code>SEEDS</code>.</div>
+  <template>The "list comprehension" between square brackets is a loop written on one line: "for each label, for each sentence, create a row". At the end we get a table of 48 rows for sentiment. The gold serves two purposes: <b>examples</b> shown to the LLM in the prompt, and <b>test</b> to measure quality. A gold must be <b>reliable</b>: this is why your review as native speakers is important. <br><br>What to check when reviewing: (1) is the label right? A sentence like "the connection is not good" must be negative, not neutral. (2) Is the sentence natural? Would a real Algerian write like this on Facebook? (3) Is the gold balanced? 16 sentences per sentiment class, 10 per disinformation class. (4) Are there duplicates? After any change, run section 4 again: the "shared sentences" check must still print 0.</template>
+</section>
+
+<!-- 18 CORPUS -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Section 4: the corpus and its checks</h2>
+  <table class="t xs">
+    <tr><th>Source (<code>GEN_MODE</code>)</th><th>What it is</th><th>Size</th></tr>
+    <tr><td><code>"file"</code> (default)</td><td>Corpus written by an LLM, read from <code>data/corpus_llm_*.csv</code></td><td>90 + 50 sentences</td></tr>
+    <tr><td><code>"offline"</code></td><td>Template generator (randomly assembled words): comparison point</td><td>depends on <code>N_PER_LABEL</code></td></tr>
+  </table>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Check 1: no leakage</h3><p>We verify that no corpus sentence is in the gold: <code>set(corpus) &amp; set(gold)</code>. Result: <b>0</b> everywhere.</p></div>
+    <div class="card"><h3>Check 2: script mix</h3><p><code>script_type()</code> looks whether a sentence contains Arabic letters (<code>[؀-ۿ]</code>), Latin letters, or both. Sentiment: 39 Arabic · 31 Latin · 20 mixed.</p></div>
+  </div>
+  <template><b>Data leakage</b>: if a test sentence were also in the training data, the model would have "learned it by heart" and the score would be false. Hence the check. <code>set(a) &amp; set(b)</code> = the intersection of two sets: the elements they have in common. <br><br>Check 2 shows that the corpus respects the constraint of the prompt: a mix of Arabic script, Latin letters and code-switching. The regular expression <code>[؀-ۿ]</code> means "any character in the Arabic Unicode block". If a sentence has Arabic AND Latin letters it is labelled "mixed (code-switching)". <br><br>Why do we also keep the template corpus? As a <b>point of comparison</b>. If a poor corpus (random assembly of words) gave the same score as the LLM corpus, then the LLM would not be needed. The experiment shows that it is not the case in sentiment.</template>
+</section>
+
+<!-- 19 PROMPT ANATOMY -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Anatomy of the generation prompt</h2>
+  <pre class="xs"><span class="p1">You are a native speaker of Algerian Arabic (Darija) and a linguist.</span>      ← ROLE
+<span class="p2">Generate 10 short Algerian Darija sentences whose content expresses a POSITIVE feeling.</span> ← TASK
+<span class="p3">Constraints: ~40% Arabic script, ~30% Arabizi, ~30% FR/AR code-switching.
+Vary the topics. No pure MSA, no duplicates, 6 to 25 words.
+No names of real people. Harmless content.</span>                     ← CONSTRAINTS
+<span class="p4">Examples of the expected style: - gold sentence 1 ... - gold sentence 4</span>      ← FEW-SHOT
+<span class="p5">Answer ONLY with a JSON array of 10 strings.</span>                              ← FORMAT</pre>
+  <ul class="xs"><li><span class="p1">Role</span>: orients the style toward Darija.</li><li><span class="p3">Constraints</span>: avoid standard Arabic and ensure variety.</li><li><span class="p4">Few-shot</span>: gives the expected "taste".</li><li><span class="p5">JSON format</span>: lets us read the answer automatically.</li></ul>
+  <template>Each part has a role. Without the constraint on scripts, an LLM mostly writes in standard Arabic, far from real Darija. Without the JSON format, the answer would contain chatter ("Here are your sentences:") that is hard to process automatically. We generate <b>per class</b> (one prompt per label): this way the label is known in advance, it is the <b>intention</b>. For fake news we ask for typical markers (urgency, "share before deletion"); for real news, a sober tone with an official source. <br><br>In the notebook, <code>TASK_DESC</code> holds the description of each class that is inserted in the prompt, <code>SYSTEM_PROMPT</code> holds the role, and <code>build_prompt(task, label, n)</code> assembles everything. Run the cell of section 4: it prints the final prompt. <br><br><b>Why is the label an "intention"?</b> Because the LLM was asked "write a negative sentence". It may occasionally write something ambiguous. We assume it obeyed, but nobody checked all 140 sentences one by one. That is exactly why the gold exists.</template>
+</section>
+
+<!-- 20 TEMPLATE GENERATOR -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>✋ The template generator</h2>
+  <p class="sm">It assembles randomly drawn pieces: <span class="chip">opener</span> + <span class="chip">subject</span> + <span class="chip">opinion</span> + <span class="chip">ending</span>. Click to generate:</p>
+  <div class="grid g3 sm">
+    <div><button class="b" id="gb-pos">Positive</button> <button class="b" id="gb-neg">Negative</button> <button class="b" id="gb-fake">Fake news</button></div>
+  </div>
+  <div class="card"><p class="gen-out ar" id="gen-out">← click a button</p></div>
+  <div class="tip xs"><b>Why it is a poor corpus:</b> little variety (12 subjects × 10 opinions…). The classifier learns to recognise these few words, not the language. This is our case <b>B</b>.</div>
+  <template>The code (<code>generate_offline</code>) does exactly this: <code>rng.choice(list)</code> draws one element at random from a list. It avoids duplicates with a <code>set</code> (a collection with no repeated elements). This generator does not "understand" anything: it only serves as a <b>point of comparison</b> to show that a poor corpus learns less than a corpus written by an LLM. <br><br>Notice how the sentences are grammatical but boring: always the same shape. A model trained on them becomes very good at recognising "the 10 opinion words" and nothing else. When it meets a real sentence with different words, it fails. In the neutral class, it even only has 8 ready-made sentences. This is the weakness we want to illustrate.</template>
+</section>
+
+<!-- 21 TEXT TO NUMBERS -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Section 5: from sentence to numbers</h2>
+  <p class="sm">A model does not read words: it only handles <b>numbers</b>. We must therefore turn each sentence into a list of numbers.</p>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Simple idea: count the words</h3><p>"bzaf mli7a bzaf" → <span class="mono">bzaf:2, mli7a:1</span></p><p class="warn">Problem: "mli7a" ≠ "mliha" ≠ "مليحة". Every variant is an unknown word.</p></div>
+    <div class="card"><h3>Our solution: count pieces of letters</h3><p>"mli7a" → <span class="mono">ml · li · i7 · 7a · mli · li7 · i7a · …</span></p><p class="ok">"mli7a" and "mliha" share "ml", "mli", "li": the model sees the resemblance.</p></div>
+  </div>
+  <pre class="xs">TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), sublinear_tf=True)
+#   char_wb       = pieces of letters, inside each word
+#   (2, 5)        = pieces of 2, 3, 4 and 5 letters
+#   sublinear_tf  = if a piece appears 10 times, it does not count 10 times more</pre>
+  <template>A <b>character n-gram</b> is a piece of n consecutive letters. "wb" = <em>word boundary</em>: we add a space at the beginning and at the end of each word, so "mli7a" becomes "␣mli7a␣" and we cut it: "␣m", "ml", "li", "i7", "7a", "a␣", then the pieces of 3, 4 and 5 letters. This also captures the beginning and the end of the words. Play with the next slide. <br><br>Why 2 to 5? Pieces of 1 letter carry almost no information; pieces longer than 5 are too rare to be reused. The range 2–5 is a classic compromise for noisy text. <br><br>The result is a very long vector (thousands of dimensions, one per piece seen in training), mostly zeros, with a number at the position of each piece present in the sentence. That vector is what the model reads.</template>
+</section>
+
+<!-- 22 NGRAM EXPLORER -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>✋ N-gram explorer</h2>
+  <input class="in" id="ng-in" value="mli7a bzaf" placeholder="type a word or a sentence">
+  <div id="ng-out" class="xs"></div>
+  <div class="ok xs" id="ng-share"></div>
+  <template>Type "mli7a" then "mliha": look at the list of common pieces shown at the bottom (compared with the reference word "mli7a"). The symbol ␣ represents the space added around the words. A small tip: also type "bzaf" and "bezzaf" to see that the two variants share several pieces. This is exactly what <code>TfidfVectorizer(analyzer="char_wb")</code> does. <br><br>Observe: a short word like "7a" yields few pieces, a long word yields many. The counter next to each size (2 letters, 3 letters...) tells you how many pieces were extracted. A whole sentence is just the pieces of all its words, one word at a time (pieces never cross a space).</template>
+</section>
+
+<!-- 23 TFIDF -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>TF-IDF: weighting the useful pieces</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>TF — frequency in the sentence</h3><p>How many times the piece appears in <b>this</b> sentence. With <code>sublinear_tf</code>: <span class="mono">1 + ln(tf)</span>.</p></div>
+    <div class="card"><h3>IDF — rarity in the corpus</h3><p>A piece present everywhere ("a␣") says little; a rare piece ("zaf") says a lot.</p><p class="mono">idf = ln((1+N)/(1+df)) + 1</p></div>
+  </div>
+  <table class="t xs">
+    <tr><th>Example (N = 4 sentences)</th><th class="n">df (sentences containing it)</th><th class="n">idf</th><th>Interpretation</th></tr>
+    <tr><td class="mono">"7a"</td><td class="n">3</td><td class="n">ln(5/4)+1 = <b>1.22</b></td><td>frequent → low weight</td></tr>
+    <tr><td class="mono">"zaf"</td><td class="n">1</td><td class="n">ln(5/2)+1 = <b>1.92</b></td><td>rare → high weight</td></tr>
+  </table>
+  <p class="xs mute">Final weight = TF × IDF, then each sentence is normalised (length 1). Result: one sentence = one long vector of numbers.</p>
+  <template>TF-IDF = <em>Term Frequency – Inverse Document Frequency</em>. The idea: what is typical of one sentence but rare in the rest of the corpus is important. The numbers in the example are computed with the scikit-learn formula (a "smoothed" idf). You do not need to compute by hand: <code>TfidfVectorizer</code> does it for the whole corpus. <br><br>An everyday image: in a library, the word "the" appears in every book, so it tells you nothing about a given book. The word "submarine" appears in few books, so when it appears many times in one book you learn something about its subject. <br><br><b>ln</b> is the natural logarithm: it grows slowly, which is the point of "sublinear": 10 occurrences should count a bit more than 1, but not 10 times more (1 + ln 10 ≈ 3.3). <br><br>Normalisation divides the vector by its length so that long and short sentences are comparable.</template>
+</section>
+
+<!-- 24 LOGISTIC REGRESSION -->
+<section class="slide" data-min="0">
+  <h2><small>3 · The notebook, section by section</small>Logistic regression without difficult maths</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>1. One score per class</h3><p>For each class, the model adds up the weights of the pieces of the sentence:</p><p class="mono">positive: 2.0 · neutral: 0.5 · negative: −1.0</p></div>
+    <div class="card"><h3>2. Turn them into probabilities (softmax)</h3><p class="mono">e^2.0 = 7.39 · e^0.5 = 1.65 · e^−1 = 0.37</p><p>total 9.41 → <b>positive 79%</b> · neutral 18% · negative 4%</p></div>
+  </div>
+  <div class="card xs"><h3>3. Learning (<code>.fit</code>)</h3><p>At the beginning the weights are arbitrary. The model looks at the training sentences with their labels, measures its mistakes, and <b>adjusts the weights</b> to make fewer. It repeats until stable (<code>max_iter=2000</code> = maximum number of rounds). <code>C=5</code>: the larger C is, the more the model sticks to the training data (risk of "learning by heart").</p></div>
+  <template>An example of what the model learns: the piece "mli" gets a strong weight toward "positive", the piece "zbl" a strong weight toward "negative". For a new sentence, it adds up and chooses the most probable class. That is what <code>model.predict</code> does. In section 10 of the notebook, <code>predict_proba</code> shows these probabilities for your own sentence. <br><br><b>Limit:</b> the model does not read the order of the words: it does not understand negation. "mchi mliha" (not good) contains the pieces of "mliha" (good), so the "positive" score goes up. <br><br>Check the softmax example: e^2.0 = 7.39, e^0.5 = 1.65, e^-1 = 0.37; sum = 9.41; 7.39/9.41 = 0.786, 1.65/9.41 = 0.175, 0.37/9.41 = 0.039. The probabilities always add up to 100%.</template>
+</section>
+
+<!-- 25 TRAIN VS TEST -->
+<section class="slide" data-min="0">
+  <h2><small>4 · Evaluating correctly</small>Training versus test</h2>
+  <div class="card sm"><h3>The exam analogy</h3><p>If we give a student the exam answers while he revises, he gets 20/20 without understanding. The same for a model: <b>we never test it on the sentences used to train it</b>.</p></div>
+  <div class="grid g2 xs">
+    <div class="warn"><b>Classic error (data leakage)</b>: training and testing on the same sentences → misleading score (e.g. 100%).</div>
+    <div class="ok"><b>Good practice</b>: separate <b>training</b> (the model learns) from <b>test</b> (the model is examined on new material).</div>
+  </div>
+  <div class="tip xs"><b>In our project:</b> the corpus and the gold share no sentence (checked), and in A and D the gold is cut into folds (next slide).</div>
+  <template>A model can <b>overfit</b> ("overfitting"): it memorises the examples instead of generalising. The only way to notice is to test it on sentences it has never seen. In the notebook: case C trains on the LLM corpus and tests on the gold: two distinct sets, no cheating possible. <br><br>The generalisation question is the heart of machine learning: we do not care how well the model remembers, we care how well it does on <em>new</em> data, like the real messages it will meet in life.</template>
+</section>
+
+<!-- 26 CROSS VALIDATION -->
+<section class="slide" data-min="0">
+  <h2><small>4 · Evaluating correctly</small>✋ 4-fold cross-validation</h2>
+  <p class="sm">Problem: the gold is small (48 sentences), we want to use it to train <b>and</b> to test. Solution: cut it into 4 folds, and each fold serves once as the test.</p>
+  <div class="folds sm">
+    <div class="foldrow"><div class="cell tr">train</div><div class="cell tr">train</div><div class="cell tr">train</div><div class="cell test">TEST</div></div>
+    <div class="foldrow"><div class="cell tr">train</div><div class="cell tr">train</div><div class="cell test">TEST</div><div class="cell tr">train</div></div>
+    <div class="foldrow"><div class="cell tr">train</div><div class="cell test">TEST</div><div class="cell tr">train</div><div class="cell tr">train</div></div>
+    <div class="foldrow"><div class="cell test">TEST</div><div class="cell tr">train</div><div class="cell tr">train</div><div class="cell tr">train</div></div>
+  </div>
+  <p class="xs mute">At the end, all 48 sentences have been tested <b>exactly once</b>, by a model that had never seen them. Function: <code>cv_gold</code>. <code>StratifiedKFold</code> keeps the same class proportions in each fold; <code>shuffle=True</code> shuffles first.</p>
+  <template>In case A, the model trains on 36 sentences (3 folds) and is tested on 12 (1 fold), 4 times. In case D, we also add the whole LLM corpus to the training, but the test fold stays only gold. The animation highlights one test fold after another. <br><br>Look at the code in <code>cv_gold</code>: <code>folds.split(...)</code> gives, for each of the 4 rounds, the indexes of the training sentences and of the test sentences. We train a fresh model with <code>make_baseline().fit(...)</code>, predict the test fold with <code>.predict(...)</code>, and store the real and predicted labels. At the end we return all the predictions, so that the metrics are computed on the whole gold. <br><br>The parameter <code>extra=file_corpus</code> glues the LLM corpus to every training set, but never to the test fold. That detail is what keeps the experiment honest.</template>
+</section>
+
+<!-- 27 METRICS -->
+<section class="slide" data-min="0">
+  <h2><small>4 · Evaluating correctly</small>The metrics</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Accuracy</h3><p>Share of correct answers: <b>correct / total</b>. E.g. 41 out of 48 = 85%. At random: 33% (3 classes), 50% (2 classes).</p></div>
+    <div class="card"><h3>Precision (of a class)</h3><p>When the model says "positive", is it right? <b>TP / (TP + FP)</b></p></div>
+    <div class="card"><h3>Recall (of a class)</h3><p>Among the truly positive sentences, how many does it find? <b>TP / (TP + FN)</b></p></div>
+    <div class="card"><h3>F1 and macro F1</h3><p>F1 = harmonic mean of precision and recall = <b>2·P·R / (P+R)</b>. <b>Macro F1</b> = average of the F1 of all classes.</p></div>
+  </div>
+  <div class="tip xs"><b>TP</b> = true positive (correctly predicted "positive"). <b>FP</b> = false positive (predicted "positive" wrongly). <b>FN</b> = false negative (a truly positive sentence missed).</div>
+  <template>Why not be satisfied with accuracy? If 90% of the sentences are neutral, a model that always answers "neutral" gets 90% accuracy without understanding anything. The macro F1 punishes this flaw because it looks at each class separately. In our corpora the classes are balanced, so accuracy and macro F1 are very close. <br><br>Think of a fishing net. <b>Precision</b>: of all the fish in the net, how many are really the species I wanted? <b>Recall</b>: of all the fish of that species in the lake, how many did I catch? A net with huge holes has high precision but low recall; a net that catches everything has high recall and low precision. The F1 score summarises both in a single number. <br><br>In the notebook, <code>evaluate()</code> computes the accuracy, the macro F1, the per-class report and the confusion matrix in one call.</template>
+</section>
+
+<!-- 28 CONFUSION -->
+<section class="slide" data-min="0">
+  <h2><small>4 · Evaluating correctly</small>✋ The confusion matrix (real numbers)</h2>
+  <div class="grid g2">
+    <div>
+      <div class="cm" id="cm" style="grid-template-columns:auto repeat(3,1fr)"></div>
+      <p class="xs mute">Rows = <b>actual</b> class · columns = <b>predicted</b> class. Model trained on the gold, tested on the sentiment LLM corpus (90 sentences). Click a cell.</p>
+    </div>
+    <div>
+      <div class="card xs" id="cm-info">Click a cell of the matrix.</div>
+      <table class="t xs" id="cm-tab" style="margin-top:1vh"></table>
+    </div>
+  </div>
+  <template>The diagonal (green) = correct answers: 23 + 20 + 26 = 69 out of 90 = <b>76.7%</b> accuracy. The red cells = confusions: for example 9 sentences that are actually negative were predicted positive. The table on the right is computed live from the matrix: precision, recall and F1 of each class. The "neutral" class is the best recognised (F1 0.87), "positive" the least (F1 0.71). <br><br>How to read the matrix: take a row (the true class), and read across to see where its sentences went. Row "negative": 9 went to positive, 20 stayed negative, 1 went to neutral. So the model's biggest weakness is mistaking negative sentences for positive ones, which fits the negation problem ("mchi mliha"). <br><br>Precision of a class = diagonal cell / sum of its column. Recall = diagonal cell / sum of its row.</template>
+</section>
+
+<!-- 29 PIPELINE -->
+<section class="slide" data-min="0">
+  <h2><small>4 · Evaluating correctly</small>Section 7: <code>evaluate_classifier</code></h2>
+  <pre class="xs">corpus["pred"] = predict_baseline(corpus["text"], task)      # train on gold, predict the corpus
+metrics_gen   = evaluate(corpus["label"], corpus["pred"], task)   # vs the INTENDED labels
+gold_true, gold_pred = cv_gold(task)                          # cross-validation on the gold
+metrics_gold  = evaluate(gold_true, gold_pred, task)          # vs the HUMAN labels
+# then: save predictions_*.csv and metrics_*.json</pre>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Score on the generated corpus</h3><p>Compared with the label <b>requested in the prompt</b>. If it is much higher than on the gold, the corpus is too easy or too stereotyped.</p></div>
+    <div class="card"><h3>Score on the human gold</h3><p>Compared with the <b>reference labels</b>. This is the most reliable measure (if the gold is reviewed by humans).</p></div>
+  </div>
+  <template>This function does for the classifier: predict on the generated corpus → evaluate (generated corpus <b>and</b> gold) → save the files. Two different scores answer two different questions. Score on the corpus: "does the classifier agree with what the LLM was asked to write?". Score on the gold: "does it do the job on reference sentences?". <br><br>Saved files: <code>data/predictions_&lt;task&gt;_&lt;corpus&gt;_baseline.csv</code> (each sentence and its prediction, handy to browse the mistakes) and <code>results/metrics_...json</code> (all the numbers). The confusion-matrix PNG is saved by <code>show_confusion</code>. <br><br>Reminder: the baseline is trained on the gold, so to evaluate it on the gold without cheating we use cross-validation (previous slides).</template>
+</section>
+
+<!-- 30 UTILITY CODE -->
+<section class="slide" data-min="0">
+  <h2><small>5 · The 4 experiments in the code</small>Section 8: <code>utility_experiment</code></h2>
+  <pre class="xs">gold_df        = gold_dataframe(task)                       # the reference sentences
+offline_corpus = generate_offline(task, N_PER_LABEL, SEED)  # template corpus
+file_corpus    = load_corpus_file(task)                     # corpus written by an LLM
+
+true_a, pred_a = cv_gold(task)                              # A: gold only, cross-validation
+model_b = make_baseline().fit(offline_corpus.text, offline_corpus.label)   # B: train on templates
+pred_b  = model_b.predict(gold_df.text)                                    #    test on ALL the gold
+model_c = make_baseline().fit(file_corpus.text, file_corpus.label)         # C: train on LLM corpus
+pred_c  = model_c.predict(gold_df.text)                                    #    test on ALL the gold
+true_d, pred_d = cv_gold(task, extra=file_corpus)           # D: gold (folds) + whole LLM corpus</pre>
+  <ul class="xs"><li><code>.fit(texts, labels)</code> = <b>train</b> · <code>.predict(texts)</code> = <b>predict</b>.</li><li><code>make_baseline()</code> = TF-IDF (character n-grams) + logistic regression.</li><li>Each case is then evaluated (<code>evaluate</code>) and saved in <code>results/utility_*.json</code>.</li></ul>
+  <template>This cell is the core of the practical work. In B and C, the test is "the whole gold" because the gold was not used for training: no need for folds. In A and D, the gold is used for training, so we use <code>cv_gold</code> (folds). The parameter <code>extra=file_corpus</code> glues the LLM corpus to each training set, without ever adding it to the test fold. <br><br>The function returns a table (case, accuracy, macro F1) and <code>plot_utility</code> draws the four horizontal bars with the chance level as a red dashed line. The same function is called a second time for the disinformation task in section 9.</template>
+</section>
+
+<!-- 31 RESULTS SENTIMENT -->
+<section class="slide" data-min="0">
+  <h2><small>6 · Results</small>Sentiment: reading the numbers</h2>
+  <div class="bars">
+    <div class="bar" data-v="35.4"><span>A · gold only</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar" data-v="68.8"><span>B · templates → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" data-v="85.4"><span>C · LLM corpus → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" data-v="79.2"><span>D · gold + LLM corpus</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+  </div>
+  <ul class="xs">
+    <li><b>A = 35%</b> (chance: 33%): 36 training sentences are too few to learn 3 classes.</li>
+    <li><b>B = 69%</b>: even a poor corpus helps, because it contains typical words ("top", "nul"...).</li>
+    <li><b>C = 85%</b>: the more varied LLM corpus learns better.</li>
+    <li><b>D = 79%</b>: &lt; C, but the gap (≈ 3 sentences out of 48) is <b>within the margin of error</b>: we conclude nothing.</li>
+  </ul>
+  <template><b>Do not over-interpret.</b> The gold contains 48 sentences: one sentence is worth about 2 points. The 95% uncertainty margin is about ±10 points. So C (85%) and D (79%) are not statistically different. However, A (35%) versus C (85%) is a huge gap, far beyond the margin: the conclusion "the LLM corpus helps" is solid. <br><br>Another point of honesty: gold and corpus were written in the same spirit, so the test is easier than with real social-media messages. <br><br>Why is D not better than C if it has MORE data? One plausible reason: the gold sentences in the training folds are few (36) next to the 90 corpus sentences, so they weigh little; and the fold test sets are tiny (12 sentences), so the noise is large. We cannot prove it with this little data: this is a hypothesis, not a result.</template>
+</section>
+
+<!-- 32 RESULTS DISINFO -->
+<section class="slide" data-min="0">
+  <h2><small>6 · Results</small>Disinformation: the style trap</h2>
+  <div class="bars">
+    <div class="bar" data-v="55"><span>A · gold only</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar" data-v="100"><span>B · templates → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" data-v="95"><span>C · LLM corpus → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" data-v="95"><span>D · gold + LLM corpus</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+  </div>
+  <div class="warn xs"><b>100% with templates: it is an alarm signal.</b> Fake news items written (by a human or an LLM) contain obvious markers: "عاجل / URGENT", "شاركوا / partagez", "مصدر مجهول". Real news items contain "حسب بيان / selon l'APS". The model learns these <b>style keywords</b>.</div>
+  <p class="xs">Honest conclusion: our model detects the <b>tone</b> of a fake news, not the <b>truth</b>. A real fake news written soberly, or a real news with an alarmist tone, would fool it.</p>
+  <template>The disinformation gold contains only 20 sentences: one sentence = 5 points, so small gaps mean nothing. Checking a fact requires consulting sources, which a text-only classifier does not do. This is a limit to mention spontaneously in front of the jury: it shows that you understood the problem. <br><br>Why is B (100%) better than C (95%)? Because the template corpus was built with exactly the same type of markers as the gold. The template "URGENT: ... share before deletion" is perfectly separable from "according to the APS ...". The result is an artefact of how easy the task is, not a sign of intelligence.</template>
+</section>
+
+<!-- 33 ERRORS -->
+<section class="slide" data-min="0">
+  <h2><small>6 · Results</small>Error analysis: real examples</h2>
+  <table class="t xs">
+    <tr><th>Sentence</th><th>Actual</th><th>Predicted</th><th>Why?</th></tr>
+    <tr><td class="ar">wallah l'connexion mchi mliha, kol nhar tweqef</td><td><span class="tag neg">negative</span></td><td><span class="tag pos">positive</span></td><td><b>Negation</b>: "mchi" (not) ignored; "mliha" (good) dominates.</td></tr>
+    <tr><td class="ar">la livraison كانت سريعة و le livreur جد محترم</td><td><span class="tag pos">positive</span></td><td><span class="tag neg">negative</span></td><td>Mixed sentence: its pieces look like those of other negative sentences.</td></tr>
+    <tr><td class="ar">ربي يخليك خويا، ساعدتني بزاف</td><td><span class="tag pos">positive</span></td><td><span class="tag neg">negative</span></td><td>Thank-you formula rarely seen in training.</td></tr>
+    <tr><td class="ar">j'adore ce téléphone، البطارية تقعد نهار كامل</td><td><span class="tag pos">positive</span></td><td><span class="tag neu">neutral</span></td><td>Factual description ("the battery lasts"): looks neutral.</td></tr>
+  </table>
+  <p class="xs mute">These errors come from the notebook output (file <code>data/predictions_sentiment_file_baseline.csv</code>). To see more: <code>get_errors(predicted, 20)</code>. The "Why?" column contains our hypotheses.</p>
+  <template>Error analysis is what shows that you understood the results: a number alone is not enough, you must explain <em>why</em> the model is wrong. The baseline counts pieces of letters: it cannot understand negation or sentence structure. A pre-trained model such as XLM-R or an LLM would do better: that is the next step. <br><br>A good method: open <code>predictions_sentiment_file_baseline.csv</code> in Excel, filter the rows where <code>label</code> differs from <code>pred</code>, read about 20 of them, and group the mistakes by type (negation, short sentences, rare spelling, mixed script...). Then you can say: "the three main error types are...". <br><br>Note: the table above lists real errors of the gold evaluation; the explanations in the last column are our interpretation, not something the model reports.</template>
+</section>
+
+<!-- 34 UNCERTAINTY -->
+<section class="slide" data-min="0">
+  <h2><small>6 · Results</small>Statistical uncertainty</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Small sample = blurry numbers</h3><p>With 48 test sentences: 1 sentence = 2.1 points. An 85% could in reality be 75% or 95%.</p><p class="mono">margin ≈ 1.96 × √(p(1−p)/n)</p></div>
+    <table class="t">
+      <tr><th>Score</th><th class="n">n test</th><th class="n">margin (95%)</th></tr>
+      <tr><td>Sentiment C: 85%</td><td class="n">48</td><td class="n">≈ ± 10 pts</td></tr>
+      <tr><td>Sentiment A: 35%</td><td class="n">48</td><td class="n">≈ ± 14 pts</td></tr>
+      <tr><td>Disinfo C: 95%</td><td class="n">20</td><td class="n">≈ ± 10 pts or more</td></tr>
+      <tr><td>Disinfo A: 55%</td><td class="n">20</td><td class="n">≈ ± 22 pts</td></tr>
+    </table>
+  </div>
+  <div class="tip xs"><b>Simple rule:</b> if two scores differ by less than the margin, do not say one is better. The <b>large</b> gaps (35% → 85%) are reliable; the small ones (79% versus 85%) are not.</div>
+  <template>To be rigorous we would need at least 200 to 300 test sentences. This is an easy improvement to mention: "with more test data we would reduce the margin to ±5 points". The margins above are approximations (normal-law formula): they give an order of magnitude, not an exact value. <br><br>Example of the formula for sentiment C: p = 0.85, n = 48: p(1−p) = 0.1275; divided by 48 = 0.00266; square root = 0.0515; times 1.96 = 0.101, i.e. about ±10 points. <br><br>An everyday image: if you ask 48 people whether they like a restaurant and 85% say yes, you would not be shocked if asking another 48 gave 78% or 90%.</template>
+</section>
+
+<!-- 35 LIMITS -->
+<section class="slide" data-min="0">
+  <h2><small>6 · Results</small>The limits, honestly</h2>
+  <ul class="sm">
+    <li><b>Sizes</b>: gold of 48 / 20 sentences; corpora of 90 / 50 sentences.</li>
+    <li><b>Same "hand"</b>: gold and LLM corpus were drafted with the help of an LLM, in the same spirit → easier test than real TikTok or Facebook Darija.</li>
+    <li><b>Synthetic labels</b>: it is the <b>intention</b> of the prompt. Not checked by several humans (no agreement measure such as kappa).</li>
+    <li><b>Disinformation</b>: we detect the style, not the truth.</li>
+    <li><b>Simple classifier</b>: does not understand negation, irony, context.</li>
+    <li><b>A single generation</b>: little diversity of topics and formulations.</li>
+  </ul>
+  <div class="ok xs"><b>Easy improvement:</b> review the gold, add real collected sentences (with permission), have 100 sentences annotated by 2 people, test XLM-R / DziriBERT.</div>
+  <template>Quoting your limits does not weaken you: on the contrary, it is what a jury looks for. Prepare a sentence: "Our results are indicative; they show a trend, not a precise measurement." <br><br><b>Kappa</b> (Cohen's kappa) measures how much two annotators agree beyond chance. If two humans disagree often on the label of a sentence, the task itself is ambiguous and no model can reach 100%. We did not measure it here. <br><br>Also mention an ethical point: the content was kept harmless, without names of real people, and the fake news items are fictional and only serve for evaluation.</template>
+</section>
+
+<!-- 36 OWN SENTENCE -->
+<section class="slide" data-min="0">
+  <h2><small>7 · Practice</small>Sections 10 and 11: your sentence, the presentation</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>Section 10 · Try your sentence</h3><pre>my_text = "wallah had l'application mli7a bzaf"
+my_task = "sentiment"       # or "disinfo"
+# trains on gold + LLM corpus, then prints
+# the class and the probability of each class</pre><p>Change <code>my_text</code>, run the cell, read the probabilities: they show how <b>confident</b> the model is.</p></div>
+    <div class="card"><h3>Section 11 · Update the presentation</h3><p>Reads <code>results/utility_sentiment.json</code> and <code>utility_disinfo.json</code>, then rewrites the <code>data-v="..."</code> of the 8 bars of <code>presentation/index.html</code> (ids <code>u-sentiment-A</code> … <code>u-disinfo-D</code>).</p><p class="mute">Run sections 8 and 9 first.</p></div>
+  </div>
+  <template>Section 10 is great for a live demonstration in front of the jury: type a sentence suggested by someone in the audience and show the prediction with its probabilities. Try also a negation ("mchi mliha") to show the known limit. <br><br>Section 11 uses a regular expression (<code>re.sub</code>) to replace only the numbers inside the HTML. After running it, refresh the browser page of the presentation (Ctrl+F5) to see the new values. If you change the gold or the corpus, always run sections 8, 9 and 11 again so that the presentation matches the notebook.</template>
+</section>
+
+<!-- 37 HOW TO RUN -->
+<section class="slide" data-min="0">
+  <h2><small>7 · Practice</small>Step-by-step instructions</h2>
+  <pre class="xs">cd "C:\Users\YOU-BER\Desktop\nlp tp"       # 1. go to the project folder
+python -m venv .venv                       # 2. create the environment (only once)
+.venv\Scripts\activate                     # 3. activate it → (.venv) appears
+pip install -r requirements.txt            # 4. install pandas, scikit-learn, matplotlib, notebook
+jupyter notebook nlp_tp_darija.ipynb       # 5. open the notebook in the browser</pre>
+  <ol class="xs" style="margin-left:2vw;display:grid;gap:.4em">
+    <li>In the notebook: <b>Run → Run All Cells</b> (or <span class="kbd">Shift</span>+<span class="kbd">Enter</span> cell by cell).</li>
+    <li>Read the results under each cell; charts are displayed in the notebook.</li>
+    <li>To update the presentation: run sections 8 and 9, then <b>section 11</b>.</li>
+    <li>VS Code: open the folder, then the <code>.ipynb</code> file, and choose the <code>.venv</code> kernel.</li>
+  </ol>
+  <template>If an error appears: 1) check that <code>(.venv)</code> is displayed in the terminal; 2) check that the notebook is really <b>inside the project folder</b> (next to <code>data/</code>); 3) <em>Kernel → Restart &amp; Run All</em> to restart cleanly; 4) read the "Frequent problems" table of the README. No LLM and no key are necessary. <br><br>What each command does: <code>cd</code> changes folder; <code>python -m venv .venv</code> creates the isolated environment; the <code>activate</code> script switches the terminal to it; <code>pip install -r requirements.txt</code> installs every library listed in the file; <code>jupyter notebook</code> starts a local server and opens the notebook in your browser. To stop it, press Ctrl+C in the terminal.</template>
+</section>
+
+<!-- 38 MODIFY -->
+<section class="slide" data-min="0">
+  <h2><small>7 · Practice</small>Modifying and extending the project</h2>
+  <table class="t xs">
+    <tr><th>I want to…</th><th>I do…</th></tr>
+    <tr><td><b>Review / correct the gold</b></td><td>Section 3: edit the lists in <code>SEEDS</code>, then run section 4 (the leakage check must print 0) and run 7 to 9 and 11 again.</td></tr>
+    <tr><td>Switch to disinformation</td><td>Section 2: <code>TASK = "disinfo"</code>, then run again from section 7.</td></tr>
+    <tr><td>Test my sentence</td><td>Section 10: change <code>my_text</code>.</td></tr>
+    <tr><td>Add sentences to the corpus</td><td>Add rows (<code>text,label,llm-claude</code>) in the CSV of <code>data/</code> with Excel, save as UTF-8.</td></tr>
+    <tr><td>Change the model</td><td>Section 5, function <code>make_baseline</code> (e.g. <code>ngram_range=(1, 4)</code> or <code>C=1.0</code>).</td></tr>
+    <tr><td>Change the number of folds</td><td>Section 6, function <code>cv_gold</code>: <code>n_splits=4</code>.</td></tr>
+  </table>
+  <template>Ideas for extensions to answer "and what next?": (1) more test data, annotated by two people; (2) fine-tune a pre-trained model (XLM-R, DziriBERT) on the generated corpus; (3) compare several generator LLMs (diversity, duplicates); (4) normalise arabizi into Arabic before classification; (5) compare with a few-shot LLM classifier. <br><br>Warning when editing the CSV: keep the three columns <code>text,label,source</code>, keep labels spelled exactly as in the gold (positive / negative / neutral, fake / real), and make sure Excel saves in <b>CSV UTF-8</b>, otherwise the Arabic letters become question marks.</template>
+</section>
+
+<!-- 39 JURY 1 -->
+<section class="slide" data-min="0">
+  <h2><small>8 · The jury</small>Likely questions — 1/2</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>"Who wrote the corpus?"</h3><p>An LLM (Claude), with the prompt of the function <code>build_prompt</code>. The gold was drafted with the help of an LLM and then reviewed by us.</p></div>
+    <div class="card"><h3>"Why character n-grams?"</h3><p>No standard spelling: "mli7a / mliha / مليحة" share pieces of letters.</p></div>
+    <div class="card"><h3>"Are synthetic labels reliable?"</h3><p>Not guaranteed: it is the intention of the prompt. Hence the reference gold, and the proposal to annotate a sample with several people.</p></div>
+    <div class="card"><h3>"Why only 35% for A?"</h3><p>36 training sentences for 3 classes: too few. This is exactly the problem the generated corpus solves (85%).</p></div>
+    <div class="card"><h3>"Why is D worse than C?"</h3><p>The gap (≈ 3 sentences out of 48) is within the margin of error (±10 points): we cannot conclude.</p></div>
+    <div class="card"><h3>"What is cross-validation?"</h3><p>We cut the gold in 4; each quarter serves once as the test, the other 3 as training. No sentence is tested by a model that has seen it.</p></div>
+  </div>
+  <template>Answer short, then give a number or an example. If you do not know: "We did not test it; it is a lead for the future." <br><br>Tip for the first question: be transparent. Saying "the corpus was written by an LLM, the gold was drafted with an LLM and reviewed by us" is honest and shows control of the method. Hiding it would be much worse if the jury asks.</template>
+</section>
+
+<!-- 40 JURY 2 -->
+<section class="slide" data-min="0">
+  <h2><small>8 · The jury</small>Likely questions — 2/2</h2>
+  <div class="grid g2 xs">
+    <div class="card"><h3>"Why 100% in disinformation?"</h3><p>Fake news have a style (urgency, "share", vague source): the model learns the tone, not the truth. A high score proves nothing about the facts.</p></div>
+    <div class="card"><h3>"Why not a stronger model?"</h3><p>The baseline is deliberately simple to understand what happens; comparing with XLM-R or a few-shot LLM is the logical next step (not done here).</p></div>
+    <div class="card"><h3>"Do LLMs know Darija?"</h3><p>Partially: they often produce a standardised Darija; arabizi and code-switching are more fragile. This is why the prompt imposes a mix of scripts.</p></div>
+    <div class="card"><h3>"Ethics?"</h3><p>Harmless content, no real people; the fake news items are fictional and only serve for evaluation.</p></div>
+    <div class="card"><h3>"Your contribution?"</h3><p>A reproducible pipeline + a 4-case evaluation (A–D) + an honest error analysis on the limits.</p></div>
+    <div class="card"><h3>"Link with a thesis?"</h3><p>Synthetic data for low-resource languages; possible applications: moderation, psychological support in dialect.</p></div>
+  </div>
+  <template>A point to master absolutely: the difference between an "intention label" (generated corpus) and a "reference label" (gold) — it is your best answer to critical questions. If the jury pushes on "is your result valid?", say: the large gap between A and C is solid, the small gaps are not, and we know it. That is a mature answer.</template>
+</section>
+
+<!-- 41 GLOSSARY -->
+<section class="slide" data-min="0">
+  <h2><small>8 · The jury</small>Express glossary</h2>
+  <div class="grid g3 xs">
+    <div class="card"><b>Darija</b>: Algerian Arabic.<br><b>Arabizi</b>: Arabic in Latin letters + digits.<br><b>Code-switching</b>: mixing languages.</div>
+    <div class="card"><b>Gold</b>: reference data reviewed by humans.<br><b>Synthetic corpus</b>: data made by a model.<br><b>Leakage</b>: testing on what was seen in training.</div>
+    <div class="card"><b>TF-IDF</b>: text → numbers according to importance.<br><b>N-gram</b>: piece of n letters.<br><b>Logistic regression</b>: model giving one probability per class.</div>
+    <div class="card"><b>Few-shot</b>: a few examples in the prompt.<br><b>Temperature</b>: creativity of the LLM.<br><b>Prompt</b>: the instruction sent to the LLM.</div>
+    <div class="card"><b>Accuracy</b>: share of correct answers.<br><b>Precision / recall / F1</b>: quality per class.<br><b>Confusion matrix</b>: actual × predicted.</div>
+    <div class="card"><b>Cross-validation</b>: testing on folds in turn.<br><b>Overfitting</b>: learning by heart.<br><b>Data augmentation</b>: adding synthetic data.</div>
+  </div>
+  <template>To re-read just before the defence. If a word escapes you, go back to the corresponding slide (Part 0 and Part 2 for the basics, Part 3 for the classifier, Part 4 for the evaluation).</template>
+</section>
+
+<!-- 42 SPLIT & CHECKLIST -->
+<section class="slide" data-min="0">
+  <h2><small>9 · Preparation</small>Speaking split and checklist</h2>
+  <div class="grid g3 xs">
+    <div class="card"><h3>Person 1</h3><p><b>Slides 1–5</b> of <code>index.html</code><br>Title, context, question, architecture, data</p></div>
+    <div class="card"><h3>Person 2</h3><p><b>Slides 6–9</b><br>Prompt, classifier, protocol, sentiment results</p></div>
+    <div class="card"><h3>Person 3</h3><p><b>Slides 10–14</b><br>Disinformation, errors, limits, conclusion, questions</p></div>
+  </div>
+  <ul class="xs">
+    <li>☐ <b>Review and correct the gold</b> in section 3 of the notebook (all together)</li>
+    <li>☐ Notebook run (<i>Restart &amp; Run All</i>) without error, then section 11 to update the bars</li>
+    <li>☐ GitHub repository pushed (without any key) and link updated on the last slide</li>
+    <li>☐ <code>index.html</code> fullscreen (<span class="kbd">F</span>), timer tested (<span class="kbd">T</span>): target ≤ 14 min 30</li>
+    <li>☐ Everyone can explain: gold versus generated corpus, cross-validation, confusion matrix</li>
+  </ul>
+  <template>Rehearse once in real conditions with the timer. Everyone must be able to answer the questions of any part: re-read the two "Likely questions" slides of this guide together. Good luck!</template>
+</section>
+
+</div>
+<div id="notes"></div>
+<div id="hud">
+  <span id="cnt"></span>
+  <span><span class="pill" id="clock">00:00</span>
+    <button id="prevBtn">←</button><button id="nextBtn">→</button></span>
+  <span class="mute">N explanations · T timer · F fullscreen</span>
+</div>
+<script src="assets/deck.js"></script>
+<script>
+/* ---------- ✋ n-gram explorer ---------- */
+function ngrams(text){
+  const out={2:[],3:[],4:[],5:[]};
+  text.toLowerCase().split(/\s+/).filter(Boolean).forEach(w=>{
+    const p=' '+w+' ';
+    for(let n=2;n<=5;n++) for(let i=0;i+n<=p.length;i++) out[n].push(p.slice(i,i+n));
+  });
+  return out;
+}
+const show=s=>s.replace(/ /g,'␣');
+function renderNg(){
+  const t=document.getElementById('ng-in').value, g=ngrams(t);
+  document.getElementById('ng-out').innerHTML=[2,3,4,5].map(n=>
+    `<div class="ng-n"><span class="lbl">${n} letters (${g[n].length})</span><span class="chips">${g[n].map(x=>`<span class="chip">${show(x)}</span>`).join('')}</span></div>`).join('');
+  const ref=ngrams('mli7a'), refSet=new Set([].concat(...[2,3,4,5].map(n=>ref[n])));
+  const all=new Set([].concat(...[2,3,4,5].map(n=>g[n]))), common=[...all].filter(x=>refSet.has(x));
+  document.getElementById('ng-share').innerHTML=`Pieces in common with "mli7a": <b>${common.length}</b> ${common.length?'→ '+common.map(x=>`<span class="chip">${show(x)}</span>`).join(' '):''}`;
+}
+document.getElementById('ng-in').addEventListener('input',renderNg); renderNg();
+
+/* ---------- ✋ template generator ---------- */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const SUBJ=["الخدمة","l'application","الأكل","le service","التوصيل","الأستاذ","had l'film","الطريق","le prix","l'accueil","الأنترنت"];
+const OPEN=["والله","franchement","wallah","بصراحة","vraiment","",""];
+const POS=["بنينة بزاف","top ماشاء الله","روعة","mli7a bzaf","très bien","ممتازة","nikel","sahla w sari3a"];
+const NEG=["زبل","nul","ما تسواش","wa3ra","décevant","kharba","ما تخدمش"];
+const FS=["عاجل:","URGENT:","bomba!","انتبهوا!"], FC=["الحكومة تقرر توزيع 100 ألف دينار","كل les écoles تتسكر 3 أشهر","tout l'internet يتقطع شهر كامل"], FE=["شاركوا قبل ما يحذفوه!!","partagez avant suppression","المصدر مجهول بصح صدقوني"];
+function gen(kind){
+  let s; if(kind==='pos') s=`${pick(OPEN)} ${pick(SUBJ)} ${pick(POS)}`.trim();
+  else if(kind==='neg') s=`${pick(OPEN)} ${pick(SUBJ)} ${pick(NEG)}`.trim();
+  else s=`${pick(FS)} ${pick(FC)}، ${pick(FE)}`;
+  document.getElementById('gen-out').textContent=s;
+}
+document.getElementById('gb-pos').onclick=()=>gen('pos');
+document.getElementById('gb-neg').onclick=()=>gen('neg');
+document.getElementById('gb-fake').onclick=()=>gen('fake');
+
+/* ---------- ✋ confusion matrix ---------- */
+const L=["positive","negative","neutral"], M=[[23,4,3],[9,20,1],[3,1,26]];
+const cm=document.getElementById('cm'); let html='<div class="hd"></div>'+L.map(l=>`<div class="hd">predicted<br>${l}</div>`).join('');
+M.forEach((row,i)=>{html+=`<div class="hd">actual<br>${L[i]}</div>`+row.map((v,j)=>`<div data-i="${i}" data-j="${j}" class="${i===j?'diag':'off'}">${v}</div>`).join('');});
+cm.innerHTML=html;
+cm.addEventListener('click',e=>{
+  const d=e.target.closest('[data-i]'); if(!d) return;
+  cm.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); d.classList.add('sel');
+  const i=+d.dataset.i,j=+d.dataset.j,v=M[i][j];
+  document.getElementById('cm-info').innerHTML= i===j
+   ? `<b class="green">Correct:</b> ${v} sentences that are actually <b>${L[i]}</b> were predicted <b>${L[i]}</b>.`
+   : `<b class="red">Error:</b> ${v} sentences that are actually <b>${L[i]}</b> were predicted <b>${L[j]}</b>.`;
+});
+let tab='<tr><th>Class</th><th class="n">Precision</th><th class="n">Recall</th><th class="n">F1</th></tr>', f1s=[];
+L.forEach((l,k)=>{
+  const tp=M[k][k], fp=M.reduce((a,r,i)=>a+(i===k?0:r[k]),0), fn=M[k].reduce((a,v,j)=>a+(j===k?0:v),0);
+  const p=tp/(tp+fp), r=tp/(tp+fn), f=2*p*r/(p+r); f1s.push(f);
+  tab+=`<tr><td>${l}</td><td class="n">${p.toFixed(2)}<br><span class="mute">${tp}/(${tp}+${fp})</span></td><td class="n">${r.toFixed(2)}<br><span class="mute">${tp}/(${tp}+${fn})</span></td><td class="n"><b>${f.toFixed(2)}</b></td></tr>`;
+});
+const acc=M.reduce((a,r,i)=>a+r[i],0)/M.flat().reduce((a,b)=>a+b,0);
+tab+=`<tr><th>Overall</th><th class="n" colspan="2">accuracy = ${(acc*100).toFixed(1)}%</th><th class="n">macro F1 = ${(f1s.reduce((a,b)=>a+b)/3).toFixed(2)}</th></tr>`;
+document.getElementById('cm-tab').innerHTML=tab;
+</script>
+</body>
+</html>

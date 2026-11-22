@@ -1,0 +1,22 @@
+{
+  "A": {
+    "label": "A · gold only (cross-validation)",
+    "accuracy": 0.3542,
+    "macro_f1": 0.3509
+  },
+  "B": {
+    "label": "B · template corpus only → gold",
+    "accuracy": 0.6875,
+    "macro_f1": 0.6824
+  },
+  "C": {
+    "label": "C · LLM corpus only → gold",
+    "accuracy": 0.8542,
+    "macro_f1": 0.854
+  },
+  "D": {
+    "label": "D · gold + LLM corpus (cross-validation)",
+    "accuracy": 0.7917,
+    "macro_f1": 0.7942
+  }
+}

@@ -1,0 +1,51 @@
+﻿text,label,source,pred
+عاجل جدا: الحكومة تمنح 200 ألف دينار لكل شاب، سجلوا قبل نهاية اليوم وشاركوا!,fake,llm-claude,fake
+"URGENT: tous les magasins ysakrou 10 jours, pénurie ta3 l'khobz, partagez",fake,llm-claude,fake
+الأطباء مخبيين علينا هذا العلاج: شاي الزنجبيل يشفي السكري في أسبوع,fake,llm-claude,fake
+"bomba: l'Algérie t5ou 100% mn l'Mondial b7ukm mohkama, l'source majhoula",fake,llm-claude,fake
+تحذير: أي واحد يشرب الماء البارد بعد الأكل يموت، شاركوا لأولادكم,fake,llm-claude,fake
+خبر مؤكد: الباك يتأجل ل 3 أشهر، صدقوني عندي واحد يخدم في الوزارة,fake,llm-claude,fake
+"l'internet rah yt9te3 f koul l'dzayer ghodwa 24h, l'khabar sah 100%",fake,llm-claude,fake
+فيديو محذوف: كيفاش وزير يوزع الأموال في الخفاء، شيرو قبل ما يمسحوه,fake,llm-claude,fake
+"Bonne nouvelle!! l'essence ywelli b 10 da, l'ministère ma yb3ch l'khabar",fake,llm-claude,fake
+الكهرباء تتقطع شهر كامل في كل الولايات من الغد، خبر عاجل,fake,llm-claude,fake
+"URGENT!! l'université t7ebs l'cours l'année kamla, wlad l'dzayer ykemlou f dar",fake,llm-claude,real
+راتب 80 ألف دينار لكل عاطل بداية الشهر، سجل رقمك في الرابط,fake,llm-claude,fake
+"attention!! l'pain ykoun b 100 da mn ghodwa, l'khabar jani men sou7bi f l'boulangerie",fake,llm-claude,fake
+اكتشاف: شرب الماء المالح يعالج كل الأمراض، شاركوا قبل الحذف,fake,llm-claude,fake
+حصري: الحكومة ستغلق كل المدارس شهرين بدون سبب، المصدر مجهول لكن مؤكد,fake,llm-claude,fake
+"tkhelsou 3la l'dwa mn l'internet, l'mouhem tb3t l'lien l'sa7bek",fake,llm-claude,fake
+عاجل: زلزال قوي غدا على الساعة 3 صباحا، حسب واحد يعرف العلم,fake,llm-claude,fake
+"l'tramway ghodwa m'ykhdemch lel abad, ils ont dit ça f l'tv (ma rahoumch ygoulou)",fake,llm-claude,fake
+كل من يشارك هذا المنشور يربح هاتف جديد، 1000 شخص فقط محظوظين,fake,llm-claude,fake
+"urgent: l'prix ta3 l'zit ywelli 500 da, la vérité li ma yehkiwhach",fake,llm-claude,fake
+هذه الصورة تثبت أن الشمس راح تتوقف عن الشروق يوم الجمعة,fake,llm-claude,fake
+wallah li ykhedem f l'ministère kssserli l'khabar: l'bac mliha ndirou ghir l'ouwel,fake,llm-claude,fake
+تحذير عاجل: حبوب جديدة في السوق تسبب الجنون، ما تشريوهاش وشاركوا,fake,llm-claude,fake
+"bomba!! koul 3ayla tkhelss 30000 da men l'état, sajjelou b numéro",fake,llm-claude,fake
+الحكومة قررت منع الخبز على المواطنين، انتشروا قبل ما يحجبو الخبر,fake,llm-claude,fake
+أعلنت وزارة التعليم العالي عن رزنامة الامتحانات للسداسي الأول، حسب الموقع الرسمي,real,llm-claude,real
+Selon l'ONM، des pluies orageuses sont attendues demain sur les wilayas de l'est,real,llm-claude,real
+المديرية العامة للضرائب تذكر بآخر أجل لتقديم التصريحات، حسب بيان,real,llm-claude,real
+l'APS rapporte que la production de blé a augmenté cette saison,real,llm-claude,real
+افتتاح خط جديد للترامواي بوهران، حسب مؤسسة المترو,real,llm-claude,real
+le ministère de l'éducation a publié la liste des centres d'examen sur son site,real,llm-claude,real
+تعلن شركة الخطوط الجوية عن برنامج رحلات الصيف، حسب بيان صحفي,real,llm-claude,real
+selon le communiqué، les inscriptions universitaires commencent le 15 juillet,real,llm-claude,real
+وزارة الصحة تدعو المواطنين إلى التلقيح ضد الأنفلونزا الموسمية، حسب بيان رسمي,real,llm-claude,real
+"L'équipe nationale a battu son adversaire 2-0 hier soir, d'après la FAF",real,llm-claude,real
+الديوان الوطني للإحصاء ينشر أرقام التضخم لشهر أكتوبر,real,llm-claude,real
+le wali a inauguré une nouvelle école primaire، حسب مصالح الولاية,real,llm-claude,real
+أعلنت سوناطراك عن اكتشاف جديد للغاز في الجنوب، حسب بيان الشركة,real,llm-claude,real
+selon l'ANEM، des offres d'emploi sont disponibles sur la plateforme officielle,real,llm-claude,real
+تم تمديد آجال التسجيل في الجامعة إلى غاية نهاية الشهر، حسب الوزارة,real,llm-claude,real
+la SNTF annonce la reprise de la ligne Alger-Oran à partir de lundi,real,llm-claude,real
+الحماية المدنية تدعو إلى الحذر من الأمطار الغزيرة، حسب بيانها,real,llm-claude,real
+d'après l'APS، le ministre a reçu une délégation lors d'une audience,real,llm-claude,real
+أصدرت الجامعة قرارا بتحديد موعد المناقشات، حسب الإعلان الرسمي,real,llm-claude,real
+un numéro vert est disponible pour les citoyens، حسب بيان الوزارة,real,llm-claude,real
+نشرت وزارة التجارة قائمة الأسعار المرجعية للمواد الأساسية,real,llm-claude,real
+"le tribunal a reporté l'audience à la semaine prochaine, selon l'APS",real,llm-claude,real
+توقعات الطقس: ارتفاع درجات الحرارة في الجنوب حسب الأرصاد الجوية,real,llm-claude,real
+selon l'ONS، un nouveau rapport démographique a été publié,real,llm-claude,real
+أعلنت جمعية علمية عن مؤتمر دولي في جامعة سطيف، حسب الإعلان الرسمي,real,llm-claude,real

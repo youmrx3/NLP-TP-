@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NLP Practical Work — Synthetic corpus & classification in Darija</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+<div id="bar"></div>
+<div id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide center" data-min="0.5">
+  <span class="tag">Practical work · PhD · NLP, Dialects &amp; Disinformation</span>
+  <h1>Does an LLM-generated corpus<br><span class="green">help classify Darija?</span></h1>
+  <p class="mute">Text generation (NLG) + classification (NLU) of sentiment and disinformation</p>
+  <p class="mute" style="margin-top:2vh"><b>Group 2</b> — Kadouria Youcef · Atia Nour · Islam Cherif El Khir</p>
+  <template><b>(30 s)</b> Hello. Our question: if we ask an LLM to write Darija sentences, do these sentences help a classifier understand <em>real</em> Darija? Two steps: generate (NLG), then classify (NLU). Press <b>→</b> to advance, <b>N</b> for these notes.</template>
+</section>
+
+<!-- 2 CONTEXT -->
+<section class="slide" data-min="1">
+  <h2><small>Context</small>Why Darija is a real challenge</h2>
+  <div class="grid g3">
+    <div class="card step"><h3>Little data</h3><p><b>Low-resource</b> language: very few labelled corpora, no standard benchmark.</p></div>
+    <div class="card step"><h3>No fixed spelling</h3><p>Arabic script <b>and</b> arabizi: <span class="mono">3, 7, 9, 5</span> = Arabic letters. "mli7a" = "مليحة".</p></div>
+    <div class="card step"><h3>Code-switching</h3><p>French + Arabic in the same sentence:<br><span class="ar">service top ماشاء الله</span></p></div>
+  </div>
+  <p class="step mute">➜ Idea: <b>make data with an LLM</b>, then measure whether it is really useful.</p>
+  <template><b>(1 min)</b> Three obstacles: little labelled data, no standard spelling (a sentence can be written in ten ways), and the French/Arabic mix. Models trained on standard Arabic often fail. A pragmatic idea: generate data with an LLM. But "generated" does not mean "useful": that is what we test.</template>
+</section>
+
+<!-- 3 QUESTION -->
+<section class="slide" data-min="1">
+  <h2><small>Assignment &amp; research question</small>Two steps, one question</h2>
+  <div class="grid g2">
+    <div class="card step"><h3 class="green">NLG — Generation</h3><p>An LLM generates a small Darija corpus (with code-switching):</p><ul><li>varied sentiments</li><li>or fake news / real news</li></ul></div>
+    <div class="card step"><h3 class="blue">NLU — Understanding</h3><p>A classifier predicts:</p><ul><li>the <b>polarity</b> (positive / negative / neutral)</li><li>or the <b>veracity</b> (fake / real)</li></ul></div>
+  </div>
+  <div class="tip step"><b>Question:</b> does training a classifier on the generated corpus give good results on reference sentences (the "gold")?</div>
+  <template><b>(1 min)</b> The assignment asks to generate, then classify. We handled both proposed tasks, sentiment and disinformation, with the same code. And we added a real scientific question: is the generated corpus useful? To answer it, we train on the synthetic corpus and test on reference sentences.</template>
+</section>
+
+<!-- 4 PIPELINE -->
+<section class="slide" data-min="1">
+  <h2><small>Architecture</small>The pipeline, in a single notebook</h2>
+  <div class="flow">
+    <div class="node step"><i>📝</i>Gold<small>reference sentences</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>✍️</i>NLG<small>prompt → LLM corpus</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>🧠</i>NLU<small>TF-IDF + logistic regression</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>📊</i>Evaluation<small>4 experiments A–D</small></div>
+  </div>
+  <pre class="step">nlp tp/
+├── nlp_tp_darija.ipynb   ← the whole project, commented line by line
+├── data/      corpus_llm_sentiment.csv · corpus_llm_disinfo.csv · outputs
+├── results/   metrics (JSON) and confusion matrices (PNG)
+└── presentation/  index.html (15 min) · equipe.html (detailed guide)</pre>
+  <template><b>(1 min)</b> Everything fits in one Jupyter notebook: gold data, generation, classifier, evaluation. The LLM-generated corpus is provided in <b>data/</b>: it was written with the notebook's prompt. No key, no server: we simply run the cells in order.</template>
+</section>
+
+<!-- 5 DATA -->
+<section class="slide" data-min="1">
+  <h2><small>The data</small>Gold vs generated corpus</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Gold (reference)</h3><p><b class="big green" data-count="68">0</b> sentences</p><p class="mute">48 for sentiment · 20 for disinformation. Used as examples and as test.</p></div>
+    <div class="card"><h3>LLM-generated corpus</h3><p><b class="big blue" data-count="140">0</b> sentences</p><p class="mute">90 for sentiment (30/class) · 50 for disinformation (25/class).</p></div>
+  </div>
+  <div class="bars step" style="margin-top:1vh">
+    <div class="bar" data-v="43"><span>Arabic script only</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" data-v="34"><span>Latin (arabizi / French)</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar" data-v="22"><span>Mixed (code-switching)</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+  </div>
+  <p class="step mute xs">Distribution of scripts in the sentiment corpus (39 / 31 / 20 sentences out of 90). No corpus sentence is in the gold: checked in the notebook.</p>
+  <template><b>(1 min)</b> Two datasets. The gold: 48 sentiment sentences and 20 disinformation sentences, our reference (to be reviewed by native speakers). The generated corpus: 90 and 50 sentences. We checked that no sentence is shared between the two, otherwise the test would be rigged ("data leakage"). The chart shows the script mix: about 43% Arabic, 34% Latin letters, 22% mixed.</template>
+</section>
+
+<!-- 6 NLG -->
+<section class="slide" data-min="1">
+  <h2><small>Step 1 · NLG</small>The prompt that generates Darija</h2>
+  <div class="card"><p class="mute" style="font-size:.8em">Example sentence (positive sentiment, code-switching):</p>
+    <p class="typing ar" data-text="la livraison كانت سريعة و le livreur جد محترم"></p></div>
+  <div class="grid g2">
+    <ul class="step"><li><b>Role</b>: "native Darija speaker"</li><li><b>Imposed mix</b>: 40% Arabic · 30% arabizi · 30% FR/AR</li><li><b>Variety</b>: studies, sport, health, transport…</li></ul>
+    <ul class="step"><li><b>Few-shot</b>: 4 gold examples in the prompt</li><li><b>JSON output</b> → automatic parsing</li><li><b>Safety</b>: harmless content, no real people</li></ul>
+  </div>
+  <template><b>(1 min)</b> The prompt is the heart of NLG: a role, an imposed mix of scripts (otherwise the LLM falls back to standard Arabic), four examples, a JSON output. For fake news we ask for the classic markers: urgency, "share before deletion", a vague source. For real news: sober tone, official source. The notebook also contains a template generator, used as a point of comparison.</template>
+</section>
+
+<!-- 7 NLU -->
+<section class="slide" data-min="1.5">
+  <h2><small>Step 2 · NLU</small>A classifier suited to free spelling</h2>
+  <div class="flow">
+    <div class="node step"><i>🔤</i>Text<small class="ar">mli7a bzaf</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>✂️</i>N-grams<small>"ml", "mli", "li7", "i7a"…</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>🔢</i>TF-IDF<small>weight per piece</small></div><div class="arrow">➜</div>
+    <div class="node step"><i>🎯</i>Logistic regression<small>probability per class</small></div>
+  </div>
+  <ul class="step sm"><li><b>Character n-grams (2 to 5)</b>: "mli7a", "mliha", "مليحة" share pieces → robust.</li><li><b>Limit</b>: does not understand negation. "mchi mliha" (not good) looks like "mliha".</li></ul>
+  <template><b>(1 min 30)</b> The text is cut into pieces of 2 to 5 letters, weighted by TF-IDF: a rare and typical piece counts more. A logistic regression then computes one probability per class. Advantage: no standard spelling needed. Limit: no understanding of the sentence. Real error example from our notebook: "wallah l'connexion mchi mliha" (the connection is not good) is classified positive because of "mliha". Comparing with a pre-trained model (XLM-R) or a few-shot LLM is the natural next step.</template>
+</section>
+
+<!-- 8 PROTOCOL -->
+<section class="slide" data-min="1">
+  <h2><small>Protocol</small>Four experiments, one single test</h2>
+  <table class="t sm">
+    <tr><th class="n">Case</th><th>Training</th><th>Test</th></tr>
+    <tr class="step"><td class="n"><b>A</b></td><td>gold only (3/4)</td><td>1/4 of the gold (cross-validation)</td></tr>
+    <tr class="step"><td class="n"><b>B</b></td><td><b>template</b> corpus only</td><td>the whole gold</td></tr>
+    <tr class="step"><td class="n"><b>C</b></td><td><b>LLM</b> corpus only</td><td>the whole gold</td></tr>
+    <tr class="step"><td class="n"><b>D</b></td><td>gold (3/4) <b>+</b> LLM corpus</td><td>1/4 of the gold (cross-validation)</td></tr>
+  </table>
+  <p class="step mute">We <b>always test on the gold, never on what was used for training</b>.</p>
+  <template><b>(1 min)</b> A: the reference, we only have the gold. B: we train only on a repetitive template corpus. C: only on the LLM corpus. D: we add the LLM corpus to the gold data. We always test on the gold; when the gold is also used for training (A and D), we use 4-fold cross-validation so that we never test on a sentence seen during training.</template>
+</section>
+
+<!-- 9 RESULTS SENTIMENT -->
+<section class="slide" data-min="1.5">
+  <h2><small>Results · Sentiment (3 classes)</small>Accuracy on the gold</h2>
+  <div class="bars">
+    <div class="bar" id="u-sentiment-A" data-v="35.4"><span>A · gold only</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar" id="u-sentiment-B" data-v="68.8"><span>B · templates → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" id="u-sentiment-C" data-v="85.4"><span>C · LLM corpus → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" id="u-sentiment-D" data-v="79.2"><span>D · gold + LLM corpus</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+  </div>
+  <p class="step mute">Chance = 33%. Gold of 48 sentences: 1 sentence ≈ 2 points; margin of error about ±10 points.</p>
+  <div class="ok step sm"><b>Reading:</b> with only 36 training sentences (A), we are close to chance. The LLM-generated corpus more than doubles the score (C).</div>
+  <template><b>(1 min 30)</b> Main result. Gold only: 35%, almost chance, because 36 training sentences are too few. Template corpus: 69%. LLM corpus: 85%. Gold plus LLM corpus: 79%. So the LLM-generated corpus helps a lot. Careful: these figures have a margin of about plus or minus 10 points with a 48-sentence gold, and D is a bit below C, which is within the margin of error: we do not conclude that D is worse. The bars are filled by section 11 of the notebook.</template>
+</section>
+
+<!-- 10 RESULTS DISINFO -->
+<section class="slide" data-min="1.5">
+  <h2><small>Results · Disinformation (fake / real)</small>Accuracy on the gold</h2>
+  <div class="bars">
+    <div class="bar" id="u-disinfo-A" data-v="55.0"><span>A · gold only</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar" id="u-disinfo-B" data-v="100.0"><span>B · templates → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" id="u-disinfo-C" data-v="95.0"><span>C · LLM corpus → gold</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+    <div class="bar f2" id="u-disinfo-D" data-v="95.0"><span>D · gold + LLM corpus</span><div class="track"><div class="fill"></div></div><b class="val"></b></div>
+  </div>
+  <div class="warn step sm"><b>⚠️ Trap:</b> 100% with simple templates! Fake news share <b>style</b> markers ("عاجل", "partagez", "مصدر مجهول"). The classifier detects the <b>tone</b>, not the <b>truth</b>.</div>
+  <p class="step mute xs">Gold of 20 sentences: 1 sentence = 5 points. Chance = 50%.</p>
+  <template><b>(1 min 30)</b> In disinformation the scores are very high, even with the template corpus (100%). That is suspicious: it shows that the task, as posed, is too easy. Fake news have a recognisable style: urgency, call to share, vague source. The classifier learns this style; it checks no fact. A 95% score therefore does not prove that we detect real disinformation, which is far more subtle. This is an important result to present honestly.</template>
+</section>
+
+<!-- 11 ERRORS -->
+<section class="slide" data-min="1">
+  <h2><small>Error analysis</small>Where does it break?</h2>
+  <div class="grid g2">
+    <ul class="sm">
+      <li class="step"><b>Negation</b>: "mchi mliha" understood as "mliha".</li>
+      <li class="step"><b>Positive ↔ neutral / negative</b>: short sentences without a clear keyword.</li>
+      <li class="step"><b>Arabizi</b>: spelling variants rare in the corpus.</li>
+    </ul>
+    <div class="card step"><h3>Real examples</h3>
+      <p class="ar sm">wallah l'connexion mchi mliha، kol nhar tweqef</p><p><span class="tag neg">actual: negative</span> ➜ <span class="tag pos">predicted: positive</span></p>
+      <p class="ar sm">la livraison كانت سريعة و le livreur جد محترم</p><p><span class="tag pos">actual: positive</span> ➜ <span class="tag neg">predicted: negative</span></p></div>
+  </div>
+  <template><b>(1 min)</b> The errors come from the model counting word pieces without understanding the sentence. Typical case: the negation "mchi mliha" (not good) classified positive because of "mliha". Second example: a positive sentence classified negative because its pieces look like those of negative sentences. A pre-trained language model (XLM-R) or an LLM would understand better: these are the planned extensions.</template>
+</section>
+
+<!-- 12 LIMITS -->
+<section class="slide" data-min="1">
+  <h2><small>Limits &amp; methodological honesty</small>What our results do not say</h2>
+  <ul class="sm">
+    <li class="step"><b>Small samples</b>: gold of 48 / 20 sentences → margin of error of ±10 points or more.</li>
+    <li class="step">Gold and LLM corpus written with the help of an LLM: <b>easier test</b> than real social-media Darija.</li>
+    <li class="step">Synthetic label = <b>intention of the prompt</b>, not human annotation.</li>
+    <li class="step">Disinformation: we learn the <b>style</b>, not the <b>truth</b>.</li>
+  </ul>
+  <template><b>(1 min)</b> Four limits to state clearly. Small samples. Gold and corpus produced in the same spirit, so the test is easier than reality: for a real study we would need sentences collected on social media and annotated by several humans. The synthetic labels are not verified. And in disinformation, we detect a style.</template>
+</section>
+
+<!-- 13 CONCLUSION -->
+<section class="slide" data-min="1">
+  <h2><small>Conclusion</small>What to remember</h2>
+  <div class="grid g3">
+    <div class="card step"><h3 class="green">1</h3><p>An LLM-generated corpus <b>helps</b>: 35% → 85% in sentiment.</p></div>
+    <div class="card step"><h3 class="gold">2</h3><p>A repetitive corpus (templates) teaches less: <b>69%</b>. Generation quality matters.</p></div>
+    <div class="card step"><h3 class="blue">3</h3><p>Next: human annotation, real collected texts, XLM-R / DziriBERT, <b>mental health</b> in dialect.</p></div>
+  </div>
+  <template><b>(1 min)</b> Three messages. One: the LLM corpus strongly improves the classifier when there is very little human data. Two: generation quality matters, a template corpus does worse. Three: the logical next steps are human annotation, real texts, pre-trained models, and applications such as psychological support in dialect. Then questions.</template>
+</section>
+
+<!-- 14 THANKS -->
+<section class="slide center" data-min="0">
+  <h1>Thank you <span class="green">!</span></h1>
+  <p class="mute">Questions? · Code: <span class="mono">github.com/youmrx3/NLP-TP-</span></p>
+  <template>Questions. See the detailed guide (equipe.html) for the prepared answers.</template>
+</section>
+
+</div>
+<div id="notes"></div>
+<div id="hud">
+  <span id="cnt"></span>
+  <span><span class="pill" id="clock">00:00</span>
+    <button id="prevBtn">←</button><button id="nextBtn">→</button></span>
+  <span class="mute">N notes · T timer · F fullscreen</span>
+</div>
+<script src="assets/deck.js"></script>
+</body>
+</html>

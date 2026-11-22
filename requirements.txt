@@ -1,0 +1,6 @@
+# Libraries needed by the notebook (install with: pip install -r requirements.txt)
+pandas          # data tables (DataFrame)
+scikit-learn    # TF-IDF, logistic regression, cross-validation, metrics
+matplotlib      # charts (bars, confusion matrices)
+notebook        # Jupyter: open and run the .ipynb file in the browser
+ipykernel       # engine that runs the cells (also required in VS Code)
